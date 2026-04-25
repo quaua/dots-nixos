@@ -51,6 +51,10 @@
     nwg-look
     yazi
     pavucontrol
+    steam
+    vlc
+    feh
+    sxiv
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
