@@ -15,9 +15,25 @@
       fi
     '';
   };
+
   dconf.settings = {
-  "org/gnome/desktop/interface" = {
-    color-scheme = "prefer-dark";
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
   };
-};
+
+  xdg.desktopEntries = {
+    feh = {
+      name = "feh";
+      exec = "feh -. %u";
+      mimeType = [ "image/jpeg" "image/png" ];
+      terminal = false;
+    };
+    sxiv = {
+      name = "sxiv";
+      exec = "sxiv -a %u";
+      mimeType = [ "image/gif" ];
+      terminal = false;
+    };
+  };
 }

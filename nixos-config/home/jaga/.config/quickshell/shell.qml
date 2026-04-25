@@ -16,7 +16,7 @@ ShellRoot {
     right: 0
     top: 0
   }
-  implicitHeight: 45
+  implicitHeight: 30 
   color: "transparent"
   
   // Border + Background Rectangle
@@ -33,8 +33,8 @@ ShellRoot {
     anchors.verticalCenter: parent.verticalCenter
     anchors.leftMargin: 15
     source: "Untitled.svg"
-    width: 30
-    height: 30
+    width: 20
+    height: 20
   }
 
   // Workspaces
@@ -56,8 +56,8 @@ ShellRoot {
           }
           return false;
         }
-        width: isFocused ? 57 : 17
-        height: 17
+        width: isFocused ? 45 : 15
+        height: 15
         radius: 10
         color: {
           if (isFocused) return "#ded0db"
@@ -93,7 +93,7 @@ ShellRoot {
       running: true
       repeat: true
       onTriggered: {
-        timeText.text = Qt.formatDateTime(new Date(), "ddd dd/MM")
+        timeText.text = Qt.formatDateTime(new Date(), "ddd MM/dd")
         timeHour.text = Qt.formatDateTime(new Date(), "h:mma")
       }
     }
