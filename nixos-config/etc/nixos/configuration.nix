@@ -55,6 +55,8 @@
     vlc
     feh
     sxiv
+    kdePackages.dolphin
+    kdePackages.qtsvg
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
