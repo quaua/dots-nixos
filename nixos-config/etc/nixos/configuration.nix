@@ -55,8 +55,9 @@
     vlc
     feh
     sxiv
-    kdePackages.dolphin
-    kdePackages.qtsvg
+    unzip
+    ffmpeg-full
+    telegram-desktop
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
