@@ -47,23 +47,13 @@ ShellRoot {
       model: 10 // Number of workspaces
       Rectangle {
         readonly property bool isFocused: Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id === (index + 1)		    
-        readonly property bool isOccupied: {
-        // We search the list of all workspaces known to Hyprland
-          for (var i = 0; i < Hyprland.workspaces.values.length; i++) {
-            if (Hyprland.workspaces.values[i].id === (index + 1)) {
-              return true;
-            }
-          }
-          return false;
-        }
+	readonly property var ws: Hyprland.workspaces.values.find(w => w.id === index + 1)
+
         width: isFocused ? 45 : 15
         height: 15
-        radius: 10
-        color: {
-          if (isFocused) return "#ded0db"
-          if (isOccupied) return "#9C929A"
-          return "#3b3b3b" // A very dark color for empty workspaces
-        }
+	radius: 10
+	color: isFocused ? "#ded0db" : (ws ? "#9c929a" : "#3b3b3b")
+
         // Smooth animation for width changes
         Behavior on width {
           NumberAnimation {

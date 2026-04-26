@@ -10,8 +10,8 @@
       jaga = "echo HI JAGA!";     
     };
     profileExtra = ''
-      if uwsm check may-start; then
-        exec uwsm start hyprland.desktop
+      if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+        exec start-hyprland
       fi
     '';
   };

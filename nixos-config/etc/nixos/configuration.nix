@@ -66,6 +66,7 @@
   #
   # NVIDIA
   #
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable; # Same as production (nvidia driver version)
   hardware.graphics.enable = true; # Enable OpenGL
   hardware.nvidia = {
@@ -73,7 +74,7 @@
     powerManagement.enable = false;
     powerManagement.finegrained = false;
     open = true; # Use open source drivers
-    nvidiaSettings = true; # to enable nvidia-settings
+    #nvidiaSettings = true; # to enable nvidia-settings
   };
   #
   # TTY AUTOLOGIN 
@@ -85,7 +86,7 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-    withUWSM = true;
+    withUWSM = false;
   };
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
@@ -99,7 +100,6 @@
   #
   environment.shellAliases = {
     nrsf = "sudo nixos-rebuild switch --flake /etc/nixos#reaper";
-    nfu = "sudo nix flake update";
   };
   #
   # AUDIO
