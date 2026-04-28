@@ -4,6 +4,7 @@
   home.username = "jaga";
   home.homeDirectory = "/home/jaga";
   home.stateVersion = "25.11";
+  
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -29,6 +30,25 @@
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
     };
+  };
+
+  programs.yazi = {
+    enable = true;
+    keymap = {
+      mgr.prepend_keymap = [
+        {
+	  on = [ "<C-n>" ];
+	  run = "shell -- xdragon -a -x -i -T \"$@\"";
+	}
+      ];
+    };
+  };
+
+  programs.neovim = {
+    enable = true;
+    extraConfig = ''
+      set number relativenumber
+    '';
   };
 
   xdg.desktopEntries = {

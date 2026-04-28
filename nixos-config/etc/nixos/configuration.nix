@@ -58,6 +58,11 @@
     unzip
     ffmpeg-full
     telegram-desktop
+    python3
+    wl-clipboard
+    cliphist
+    dragon-drop
+    flameshot
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -67,15 +72,16 @@
   #
   # NVIDIA
   #
+  hardware.graphics.enable32Bit = true;
+  boot.blacklistedKernelModules = [ "nouveau" ];
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable; # Same as production (nvidia driver version)
   hardware.graphics.enable = true; # Enable OpenGL
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
   hardware.nvidia = {
     modesetting.enable = true; # modesetting is required
     powerManagement.enable = false;
     powerManagement.finegrained = false;
     open = true; # Use open source drivers
-    #nvidiaSettings = true; # to enable nvidia-settings
   };
   #
   # TTY AUTOLOGIN 
