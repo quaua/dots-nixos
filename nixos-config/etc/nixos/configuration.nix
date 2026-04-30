@@ -47,8 +47,6 @@
     swaynotificationcenter
     quickshell
     rofi
-    adwaita-icon-theme
-    nwg-look
     yazi
     pavucontrol
     steam
@@ -63,6 +61,9 @@
     cliphist
     dragon-drop
     flameshot
+    gimp
+    fastfetch
+    morewaita-icon-theme
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -97,6 +98,10 @@
   };
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
+  };
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
   #
   # NIX EXPERIMENTAL
