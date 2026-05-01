@@ -4,6 +4,7 @@ import Quickshell.Hyprland
 import Quickshell.Io
 import QtQuick
 import QtQml.Models
+import Quickshell.Services.SystemTray
 
 ShellRoot {
   PanelWindow {
@@ -75,28 +76,12 @@ ShellRoot {
       }
     }
 
-    Row {
-      spacing: 10
+    Item {
+      id: time
       anchors.centerIn: parent
-
-      Text {
-        id: timeHour
-        text: Qt.formatDateTime(new Date(), "h:mma")
-        color: "white"
-        font.pixelSize: 16
-        font.family: Globals.fontFamily
-        anchors.verticalCenter: parent.verticalCenter
-      }
-
-      Text {
-        id: timeText
-        text: Qt.formatDateTime(new Date(), "ddd dd/MM")
-        color: "white"
-        font.pixelSize: 16
-        font.family: Globals.fontFamily
-        anchors.verticalCenter: parent.verticalCenter
-      }
-
+      anchors.verticalCenter: parent.verticalCenter
+      width: childrenRect.width 
+      height: childrenRect.height
       Timer {
         interval: 1000
         running: true
@@ -104,6 +89,30 @@ ShellRoot {
         onTriggered: {
           timeText.text = Qt.formatDateTime(new Date(), "MMM dd")
           timeHour.text = Qt.formatDateTime(new Date(), "hh:mm A")
+        }
+      }
+      Row {
+        spacing: 10
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        anchors.verticalCenter: parent.verticalCenter
+
+        Text {
+          id: timeHour
+          text: Qt.formatDateTime(new Date(), "h:mma")
+          color: "white"
+          font.pixelSize: 16
+          font.family: Globals.fontFamily
+          anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Text {
+          id: timeText
+          text: Qt.formatDateTime(new Date(), "ddd dd/MM")
+          color: "white"
+          font.pixelSize: 16
+          font.family: Globals.fontFamily
+          anchors.verticalCenter: parent.verticalCenter
         }
       }
     }
@@ -117,12 +126,30 @@ ShellRoot {
       spacing: 5
 
       Instantiator {
-        model: sysTray.items
+        model: SystemTray.items
 	delegate: Image {
 	  width: 24
 	  height: 24
 	  source: modelData.icon || "image-missing"
 	  parent: sysTray
+	  //---
+	  MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+    
+            onClicked: (mouse) => {
+              if (mouse.button === Qt.LeftButton) {
+              // Tells the app: "The user wants to open/focus you"
+                modelData.activate(); 
+	      } 
+	      else if (mouse.button === Qt.RightButton) {
+            // Tells the app: "Show your context menu here"
+            // 'parent.window' ensures the menu appears on the correct screen
+              modelData.display(parent.window, mouse.x, mouse.y); 
+        }
+    }
+}
+	  //---
 	}
       }
     }

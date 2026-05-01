@@ -109,7 +109,6 @@
     };
   };
 
-
   gtk = {
     enable = true;
     
@@ -120,5 +119,59 @@
     #Icons
     iconTheme.name = "MoreWaita";
     iconTheme.package = pkgs.morewaita-icon-theme;
+  };
+
+  programs.rofi = {
+    enable = true;
+
+    extraConfig = {
+      font = "JetBrainsMono Nerd Font 12";
+      show-icons = true;
+      icon-theme = "MoreWaita";
+      drun-display-format = "{name}";
+      display-drun = "";
+    };
+
+    theme = let
+      inherit (config.lib.formats.rasi) mkLiteral;
+    in {
+      "*" = {
+        my-bg = mkLiteral "#1a1a1a";
+        my-fg = mkLiteral "#ded0db";
+        background-color = mkLiteral "transparent";
+        text-color = mkLiteral "@my-fg";
+      };
+
+      "window" = {
+        width = mkLiteral "960px";
+        background-color = mkLiteral "@my-bg";
+        border = mkLiteral "2px";
+        border-color = mkLiteral "@my-fg";
+        border-radius = mkLiteral "4px";
+	# gap between apps and border of rofi
+	padding = mkLiteral "20px"; 
+      };
+
+      "listview" = {
+        # gap between apps
+        spacing = mkLiteral "5px";
+        # gap between apps and search bar
+        margin = mkLiteral "10px 0 0 0"; 
+      };
+
+      "element" = {
+        # gap between name of app and its box
+        padding = mkLiteral "4px 6px";
+      };
+
+      "element selected" = {
+        background-color = mkLiteral "@my-fg";
+        text-color = mkLiteral "@my-bg";
+      };
+  
+      "element-text" = {
+        text-color = mkLiteral "inherit";
+      };
+    };
   };
 }

@@ -60,10 +60,12 @@
     wl-clipboard
     cliphist
     dragon-drop
-    flameshot
     gimp
     fastfetch
     morewaita-icon-theme
+    grim
+    slurp
+    satty
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
