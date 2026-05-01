@@ -54,7 +54,7 @@
   xdg.desktopEntries = {
     feh = {
       name = "feh";
-      exec = "feh -. %u";
+      exec = "feh -. -Z %u";
       mimeType = [ "image/jpeg" "image/png" ];
       terminal = false;
     };

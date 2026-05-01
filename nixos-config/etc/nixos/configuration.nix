@@ -50,7 +50,6 @@
     yazi
     pavucontrol
     steam
-    vlc
     feh
     sxiv
     unzip
@@ -66,6 +65,7 @@
     grim
     slurp
     satty
+    vlc
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
