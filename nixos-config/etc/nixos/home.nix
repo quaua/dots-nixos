@@ -75,11 +75,12 @@
       bold_font = "auto";
       bold_italic_font = "auto";
       font_size = "12.0";
-      foreground = "#ded0db";
-      background = "#1a1a1a";
-      selection_foreground = "#1a1a1a";
-      selection_background = "#ded0db";
-      cursor = "#ded0db";
+      foreground = "#f5f6f7";
+      background = "#000000";
+      background_opacity = "0.8";
+      selection_foreground = "#000000";
+      selection_background = "#f5f6f7";
+      cursor = "#f5f6f7";
       cursor_shape = "block";
       cursor_blink_interval = "0.5";
       confirm_os_window_close = 0;
@@ -88,8 +89,8 @@
       open_url_with = "default";
       window_border_width = "1";
       window_margin_width = "5";
-      active_border_color = "#ded0db";
-      inactive_border_color = "#3b3b3b";
+      active_border_color = "#f5f6f7";
+      inactive_border_color = "#808080";
       color0 = "#262626";
       color8 = "#4d4d4d";
       color1 = "#ae4040";
@@ -136,17 +137,17 @@
       inherit (config.lib.formats.rasi) mkLiteral;
     in {
       "*" = {
-        my-bg = mkLiteral "#1a1a1a";
-        my-fg = mkLiteral "#ded0db";
+        #my-bg = mkLiteral "#00000099";
+        #my-fg = mkLiteral "#f5f6f7";
         background-color = mkLiteral "transparent";
-        text-color = mkLiteral "@my-fg";
+        #text-color = mkLiteral "@my-fg";
       };
 
       "window" = {
         width = mkLiteral "960px";
-        background-color = mkLiteral "@my-bg";
+        background-color = mkLiteral "#00000099";
         border = mkLiteral "2px";
-        border-color = mkLiteral "@my-fg";
+        border-color = mkLiteral "#f5f6f7";
         border-radius = mkLiteral "4px";
 	# gap between apps and border of rofi
 	padding = mkLiteral "20px"; 
@@ -165,8 +166,8 @@
       };
 
       "element selected" = {
-        background-color = mkLiteral "@my-fg";
-        text-color = mkLiteral "@my-bg";
+        background-color = mkLiteral "#f5f6f7";
+        text-color = mkLiteral "#00000099";
       };
   
       "element-text" = {

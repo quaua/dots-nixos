@@ -1,1 +1,2 @@
 singleton Globals 1.0 Globals.qml
+singleton Appearance Appearance.qml

@@ -4,6 +4,8 @@ import Quickshell.Hyprland
 import Quickshell.Io
 import QtQuick
 import QtQml.Models
+import Quickshell.Services.SystemTray
+import Quickshell.Wayland
 
 ShellRoot {
   PanelWindow {
@@ -17,69 +19,62 @@ ShellRoot {
       right: 0
       top: 0
     }
-    implicitHeight: 32 
+
+    WlrLayershell.namespace: "bar"
+    implicitHeight: Appearance.barHeight 
     color: "transparent"
   
     // Border + Background Rectangle
     Rectangle {
+      id: bar
       anchors.fill: parent
-      color: '#1a1a1a'
+      color: Qt.rgba(0 , 0 , 0 , 0.75)
       border.width: 0
       radius: 0
     }
 
-    // Logo
-    Image {
+    // Workspaces
+    Rectangle {
+      id: workspacesBlock
+      width: workspaces.width + 45
+      height: Appearance.barHeight - 8
+      radius: height/2
+      color: Qt.rgba(0 , 0 , 0 , 0.35)
       anchors.left: parent.left
       anchors.verticalCenter: parent.verticalCenter
       anchors.leftMargin: 15
-      source: "Untitled.svg"
-      width: 24
-      height: 24
-    }
+      Row {
+        id: workspaces
+	spacing: 15
+	anchors.centerIn: parent
+	Repeater {
+	  model: 10
+	  Rectangle {
+            readonly property bool isFocused: Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id === (index + 1)		    
+            readonly property var ws: Hyprland.workspaces.values.find(w => w.id === index + 1)
+	    readonly property bool prevOccupied: index > 0 && Hyprland.workspaces.values.find(w => w.id === index) !== undefined
+	    readonly property bool nextOccupied: index < 9 && Hyprland.workspaces.values.find(w => w.id === index + 2) !== undefined
+	    //property bool isHovered: ms.containsMouse
 
-    // Workspaces
-    Row {
-      id: workspaces
-      anchors.left: parent.left
-      anchors.verticalCenter: parent.verticalCenter
-      anchors.leftMargin: 55
-      spacing: 10
-      Repeater {
-        model: 10 // Number of workspaces
-        Rectangle {
-          readonly property bool isFocused: Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id === (index + 1)		    
-	  readonly property var ws: Hyprland.workspaces.values.find(w => w.id === index + 1)
-	  property bool isHovered: ms.containsMouse
+	    anchors.verticalCenter: parent.verticalCenter
+	    width: 10
+	    height: 10
+	    radius: height/2
+	    color: isFocused ? Qt.rgba(1 , 1 , 1 , 0.9) : Qt.rgba(1 , 1 , 1 , 0.2)
+	    Rectangle {
+	      width: 25
+	      height: 25
+	      radius: height/2
+	      color: ws ? Qt.rgba(1 , 1 , 1 , 0.1) : "transparent"
+	      anchors.centerIn: parent
 
-          width: isFocused ? 35 : 15
-          height: 15
-	  radius: 10
-	  color: isFocused ? "#ded0db" : (isHovered ? "#737373" : (ws ? "#9c929a" : "#3b3b3b"))
-
-	  MouseArea {
-	    id: ms
-	    hoverEnabled: true
-            anchors.fill: parent
-            onClicked: Hyprland.dispatch("workspace " + (index + 1))
-          }
-
-          // Smooth animation for width changes
-          Behavior on width {
-            NumberAnimation {
-              duration: 200
-              easing.type: Easing.OutCubic
-            }
-          }
-    
-          // Smooth animation for color changes
-          Behavior on color {
-            ColorAnimation {
-              duration: 200
-              easing.type: Easing.OutCubic
-            }
-          }
-        }
+	      topLeftRadius: prevOccupied ? 0 : height/2
+              bottomLeftRadius: prevOccupied ? 0 : height/2
+              topRightRadius: nextOccupied ? 0 : height/2
+	      bottomRightRadius: nextOccupied ? 0 : height/2
+	    }
+	  }
+	}
       }
     }
 
@@ -118,21 +113,27 @@ ShellRoot {
 
     //Tray
     Row {
-      id: sysTray
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
       anchors.rightMargin: 15
-      spacing: 5
+      spacing: 8
+      
+      Repeater {
+        model: SystemTray.items
+	
+	delegate: MouseArea {
+	  id: trayItem
+	  width: 25
+	  height: 25
+	  hoverEnabled: true
 
-      Instantiator {
-        model: sysTray.items
-	delegate: Image {
-	  width: 24
-	  height: 24
-	  source: modelData.icon || "image-missing"
-	  parent: sysTray
+	  Image {
+	    anchors.fill: parent
+	    source: modelData.icon
+	    fillMode: Image.PreserveAspectFit
+	  }
 	}
-      }
+      }  
     }
   }
 }

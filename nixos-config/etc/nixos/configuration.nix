@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
@@ -37,10 +37,11 @@
 
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
+    inputs.matugen.packages.x86_64-linux.default
+    inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
     neovim
     git
     kitty
-    swaybg
     firefox
     spotify
     vesktop
@@ -66,6 +67,7 @@
     slurp
     satty
     vlc
+    obs-studio
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
