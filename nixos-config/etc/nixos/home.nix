@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   home.username = "jaga";
@@ -18,6 +18,8 @@
 	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
       }
+
+      export EDITOR=nvim
     '';
     profileExtra = ''
       if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
@@ -75,38 +77,35 @@
       bold_font = "auto";
       bold_italic_font = "auto";
       font_size = "12.0";
-      foreground = "#f5f6f7";
-      background = "#000000";
-      background_opacity = "0.8";
-      selection_foreground = "#000000";
-      selection_background = "#f5f6f7";
-      cursor = "#f5f6f7";
+      foreground = "#cccccc";
+      background = "#121212";
+      background_opacity = "0.9";
+      selection_background = "#333333";
+      cursor = "#cccccc";
       cursor_shape = "block";
       cursor_blink_interval = "0.5";
       confirm_os_window_close = 0;
-      mouse_hide_wait = "0.0";
+      mouse_hide_wait = "1";
       enable_audio_bell = "no";
       open_url_with = "default";
       window_border_width = "1";
       window_margin_width = "5";
-      active_border_color = "#f5f6f7";
-      inactive_border_color = "#808080";
-      color0 = "#262626";
-      color8 = "#4d4d4d";
-      color1 = "#ae4040";
-      color9 = "#dc4c4c";
-      color2 = "#3dab59";
-      color10 = "#47d86c";
-      color3 = "#a5ab64";
-      color11 = "#d0d87a";
-      color4 = "#8368aa";
-      color12 = "#a480d7";
-      color5 = "#ae5789";
-      color13 = "#dc6aac";
-      color6 = "#63a0ad";
-      color14 = "#7ac9da";
-      color7 = "#aaaaa6";
-      color15 = "#d6d6d1";
+      color0 = "#333333";
+      color8 = "#6a6a6a";
+      color1 = "#cc3333";
+      color9 = "#e51919";
+      color2 = "#33cc33";
+      color10 = "#19e519";
+      color3 = "#cccc33";
+      color11 = "#e5e519";
+      color4 = "#3333cc";
+      color12 = "#1919e5";
+      color5 = "#cc33cc";
+      color13 = "#e519e5";
+      color6 = "#33cccc";
+      color14 = "#19e5e5";
+      color7 = "#cccccc";
+      color15 = "#e5e5e5";
     };
   };
 
@@ -137,17 +136,18 @@
       inherit (config.lib.formats.rasi) mkLiteral;
     in {
       "*" = {
-        #my-bg = mkLiteral "#00000099";
-        #my-fg = mkLiteral "#f5f6f7";
+        my-bg = mkLiteral "#121212CC";
+        my-fg = mkLiteral "#cccccc";
+	txtcolor = mkLiteral "#121212";
+	text-color = mkLiteral "@my-fg";
         background-color = mkLiteral "transparent";
-        #text-color = mkLiteral "@my-fg";
       };
 
       "window" = {
         width = mkLiteral "960px";
-        background-color = mkLiteral "#00000099";
+        background-color = mkLiteral "@my-bg";
         border = mkLiteral "2px";
-        border-color = mkLiteral "#f5f6f7";
+        border-color = mkLiteral "@my-fg";
         border-radius = mkLiteral "4px";
 	# gap between apps and border of rofi
 	padding = mkLiteral "20px"; 
@@ -166,8 +166,8 @@
       };
 
       "element selected" = {
-        background-color = mkLiteral "#f5f6f7";
-        text-color = mkLiteral "#00000099";
+        background-color = mkLiteral "@my-fg";
+        text-color = mkLiteral "@txtcolor";
       };
   
       "element-text" = {
@@ -175,4 +175,5 @@
       };
     };
   };
+  #home.file."DEST".source = SOURCE;
 }

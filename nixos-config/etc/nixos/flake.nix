@@ -26,6 +26,7 @@
           home-manager = {
  	    useGlobalPkgs = true;
 	    useUserPackages = true;
+	    extraSpecialArgs = { inherit inputs; };
 	    users.jaga = import ./home.nix;
 	  };
 	}

@@ -1,3 +1,5 @@
+//@ pragma UseQApplication
+
 import Quickshell
 import Quickshell.Services.Mpris
 import Quickshell.Hyprland
@@ -21,6 +23,7 @@ ShellRoot {
     }
 
     WlrLayershell.namespace: "bar"
+    WlrLayershell.layer: WlrLayershell.Bottom
     implicitHeight: Appearance.barHeight 
     color: "transparent"
   
@@ -38,8 +41,8 @@ ShellRoot {
       id: workspacesBlock
       width: workspaces.width + 45
       height: Appearance.barHeight - 8
-      radius: height/2
-      color: Qt.rgba(0 , 0 , 0 , 0.35)
+      radius: height/2 - 4
+      color: Qt.rgba(0 , 0 , 0 , 0.2)
       anchors.left: parent.left
       anchors.verticalCenter: parent.verticalCenter
       anchors.leftMargin: 15
@@ -54,19 +57,30 @@ ShellRoot {
             readonly property var ws: Hyprland.workspaces.values.find(w => w.id === index + 1)
 	    readonly property bool prevOccupied: index > 0 && Hyprland.workspaces.values.find(w => w.id === index) !== undefined
 	    readonly property bool nextOccupied: index < 9 && Hyprland.workspaces.values.find(w => w.id === index + 2) !== undefined
-	    //property bool isHovered: ms.containsMouse
+	    property bool isHovered: ms.containsMouse
 
 	    anchors.verticalCenter: parent.verticalCenter
 	    width: 10
 	    height: 10
-	    radius: height/2
-	    color: isFocused ? Qt.rgba(1 , 1 , 1 , 0.9) : Qt.rgba(1 , 1 , 1 , 0.2)
+	    radius: width/2
+	    color: isFocused ? Qt.rgba(1 , 1 , 1 , 0.9) : ( isHovered ? Qt.rgba(1 , 1 , 1 , 0.55) : Qt.rgba(1 , 1 , 1 , 0.2) ) 
 	    Rectangle {
 	      width: 25
 	      height: 25
-	      radius: height/2
-	      color: ws ? Qt.rgba(1 , 1 , 1 , 0.1) : "transparent"
+	      radius: width/2
+	      color: ws ? Qt.rgba(1 , 1 , 1 , 0.1) : "transparent" 
 	      anchors.centerIn: parent
+
+	      MouseArea {
+                id: ms
+                anchors.fill: parent
+	        hoverEnabled: true
+		onClicked: {
+		  let target = index + 1;
+          	  Hyprland.dispatch(`workspace ${target}`);
+		} 
+              }
+
 
 	      topLeftRadius: prevOccupied ? 0 : height/2
               bottomLeftRadius: prevOccupied ? 0 : height/2
@@ -78,62 +92,91 @@ ShellRoot {
       }
     }
 
-    Row {
-      spacing: 10
+    Rectangle {
+      id: timerBox
       anchors.centerIn: parent
+      color: timerClick.containsMouse ? Qt.rgba(1 , 1 , 1 , 0.05) : Qt.rgba(0 , 0 , 0 , 0.2)
+      width: rowTime.width + 40
+      height: Appearance.barHeight - 8
+      radius: height/2 - 4
 
-      Text {
-        id: timeHour
-        text: Qt.formatDateTime(new Date(), "h:mma")
-        color: "white"
-        font.pixelSize: 16
-        font.family: Globals.fontFamily
-        anchors.verticalCenter: parent.verticalCenter
+      MouseArea {
+	id: timerClick
+        anchors.fill: parent
+	hoverEnabled: true
       }
 
-      Text {
-        id: timeText
-        text: Qt.formatDateTime(new Date(), "ddd dd/MM")
-        color: "white"
-        font.pixelSize: 16
-        font.family: Globals.fontFamily
-        anchors.verticalCenter: parent.verticalCenter
+      Behavior on color {
+        ColorAnimation {
+          duration: 300
+          easing.type: Easing.OutCubic 
+        }
       }
 
-      Timer {
-        interval: 1000
-        running: true
-        repeat: true
-        onTriggered: {
-          timeText.text = Qt.formatDateTime(new Date(), "MMM dd")
-          timeHour.text = Qt.formatDateTime(new Date(), "hh:mm A")
+      Row {
+	id: rowTime
+        spacing: 10
+        anchors.centerIn: parent
+
+        Text {
+          id: time
+          text: Qt.formatDateTime(new Date(), "HH:mm ddd, dd/MM")
+	  color: "white"
+	  font.pixelSize: 16
+	  font.family: Globals.fontFamily
+	  font.bold: true
+	  anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Timer {
+          interval: 1000
+          running: true
+          repeat: true
+          onTriggered: {
+            time.text = Qt.formatDateTime(new Date(), "HH:mm ddd, dd/MM")
+          }
         }
       }
     }
 
     //Tray
-    Row {
+    Rectangle {
+      id: trayBox
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
       anchors.rightMargin: 15
-      spacing: 8
-      
-      Repeater {
-        model: SystemTray.items
-	
-	delegate: MouseArea {
-	  id: trayItem
-	  width: 25
-	  height: 25
-	  hoverEnabled: true
-
-	  Image {
-	    anchors.fill: parent
-	    source: modelData.icon
-	    fillMode: Image.PreserveAspectFit
-	  }
-	}
-      }  
+      color: Qt.rgba(0 , 0 , 0 , 0.2)
+      width: trays.width + 16
+      height: Appearance.barHeight - 8
+      radius: height/2 - 4
+      Row {
+	id: trays
+	spacing: 8
+	anchors.centerIn: parent
+        Repeater {
+          model: SystemTray.items
+          delegate: Item {
+	    width: 24
+	    height: 24
+	    opacity: msTray.containsMouse ? 1 : 0.8
+            Image {
+              anchors.fill: parent
+              source: modelData.icon 
+              fillMode: Image.PreserveAspectFit
+            }
+	    MouseArea {
+	      id: msTray
+              anchors.fill: parent
+              hoverEnabled: true
+              acceptedButtons: Qt.LeftButton | Qt.RightButton
+              onClicked: (mouse) => {
+                if (mouse.button === Qt.LeftButton) modelData.activate()
+                //else if (mouse.button === Qt.RightButton)
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
