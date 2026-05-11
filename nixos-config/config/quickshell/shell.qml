@@ -164,15 +164,32 @@ ShellRoot {
               source: modelData.icon 
               fillMode: Image.PreserveAspectFit
             }
+
+	    Process {
+              id: runSteam
+	      command: ["sh", "-c", "steam"]
+	      running: false
+    	    }
+
 	    MouseArea {
 	      id: msTray
               anchors.fill: parent
               hoverEnabled: true
               acceptedButtons: Qt.LeftButton | Qt.RightButton
               onClicked: (mouse) => {
-                if (mouse.button === Qt.LeftButton) modelData.activate()
-                //else if (mouse.button === Qt.RightButton)
-              }
+		console.log("--- Tray Item Debug ---")
+    		console.log("ID:    ", modelData.id)
+    		console.log("Title: ", modelData.title)
+   	 	console.log("-----------------------")      
+	        if (mouse.button === Qt.LeftButton) {
+                  if (modelData.id.toLowerCase() === "steam") {
+                    runSteam.running = true
+	          }
+	          else {
+                    modelData.activate();
+                  }
+                }
+	      }
             }
           }
         }

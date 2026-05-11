@@ -43,7 +43,6 @@
     git
     kitty
     firefox
-    spotify
     vesktop
     swaynotificationcenter
     quickshell
@@ -68,6 +67,12 @@
     satty
     vlc
     obs-studio
+    fdupes
+    findimagedupes
+    mediainfo
+    imagemagick
+    exiftool
+    spicetify-cli
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono

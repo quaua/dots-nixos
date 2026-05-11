@@ -1,0 +1,17 @@
+[config]
+
+[templates.kitty]
+input_path = './templates/kitty-colors.conf'
+output_path = '~/.config/kitty/colors.conf'
+
+[templates.yazi]
+input_path = './templates/yazi-colors.toml'
+output_path = '~/.config/yazi/theme.toml'
+
+[templates.spotify]
+input_path = './templates/spicetify-colors.ini'
+output_path = '~/.config/spicetify/Themes/Matugen/color.ini'
+
+[templates.vesktop]
+input_path = './templates/vesktop-colors.css'
+output_path = '~/.config/vesktop/themes/midnight-discord.css'

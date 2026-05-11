@@ -1,6 +1,15 @@
 { config, pkgs, inputs, ... }:
 
+let
+  #dotfiles = "/home/jaga/nixos-config";
+  #yaziPath = "/home/jaga/nixos-config/nixos/yaziconf";
+in
+
 {
+  imports = [
+    inputs.spicetify-nix.homeManagerModules.default
+  ];
+
   home.username = "jaga";
   home.homeDirectory = "/home/jaga";
   home.stateVersion = "25.11";
@@ -44,12 +53,19 @@
 	}
       ];
     };
+    plugins = {
+      full-border = pkgs.yaziPlugins.full-border;
+      mediainfo = pkgs.yaziPlugins.mediainfo;
+    };
   };
 
   programs.neovim = {
     enable = true;
-    extraConfig = ''
-      set number relativenumber
+    initLua = ''
+      vim.opt.relativenumber = true
+      vim.g.mapleader = " "
+      vim.keymap.set({'n', 'x'}, '<leader>y', [["+y]], { desc = "Copy to system clipboard" })
+      vim.keymap.set({'n', 'x'}, '<leader>p', [["+p]], { desc = "Paste from system clipboard" })
     '';
   };
 
@@ -77,11 +93,7 @@
       bold_font = "auto";
       bold_italic_font = "auto";
       font_size = "12.0";
-      foreground = "#cccccc";
-      background = "#121212";
       background_opacity = "0.9";
-      selection_background = "#333333";
-      cursor = "#cccccc";
       cursor_shape = "block";
       cursor_blink_interval = "0.5";
       confirm_os_window_close = 0;
@@ -90,23 +102,10 @@
       open_url_with = "default";
       window_border_width = "1";
       window_margin_width = "5";
-      color0 = "#333333";
-      color8 = "#6a6a6a";
-      color1 = "#cc3333";
-      color9 = "#e51919";
-      color2 = "#33cc33";
-      color10 = "#19e519";
-      color3 = "#cccc33";
-      color11 = "#e5e519";
-      color4 = "#3333cc";
-      color12 = "#1919e5";
-      color5 = "#cc33cc";
-      color13 = "#e519e5";
-      color6 = "#33cccc";
-      color14 = "#19e5e5";
-      color7 = "#cccccc";
-      color15 = "#e5e5e5";
     };
+    extraConfig = ''
+      include colors.conf
+    '';
   };
 
   gtk = {
@@ -136,9 +135,9 @@
       inherit (config.lib.formats.rasi) mkLiteral;
     in {
       "*" = {
-        my-bg = mkLiteral "#121212CC";
-        my-fg = mkLiteral "#cccccc";
-	txtcolor = mkLiteral "#121212";
+        my-bg = mkLiteral "#0e0e0eCC";
+        my-fg = mkLiteral "#e2e2e2";
+	txtcolor = mkLiteral "#0e0e0e";
 	text-color = mkLiteral "@my-fg";
         background-color = mkLiteral "transparent";
       };
@@ -175,5 +174,25 @@
       };
     };
   };
-  #home.file."DEST".source = SOURCE;
+
+  programs.spicetify =
+  let
+    spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  in
+  {
+    enable = true;
+    enabledExtensions = with spicePkgs.extensions; [
+      adblock
+    ];
+  };
+
+
+  xdg.configFile."yazi/yazi.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/yaziconf/yazi.toml";
+  xdg.configFile."yazi/init.lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/yaziconf/init.lua";
+  xdg.configFile."matugen/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/config.toml";
+  xdg.configFile."matugen/templates/kitty-colors.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/kitty-colors.conf";
+  xdg.configFile."matugen/templates/yazi-colors.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/yazi-colors.toml";
+  xdg.configFile."matugen/templates/spicetify-colors.ini".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/spicetify-colors.ini";
+  xdg.configFile."matugen/templates/vesktop-colors.css".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/vesktop-colors.css";
+
 }

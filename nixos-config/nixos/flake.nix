@@ -13,6 +13,7 @@
       # If you need a specific version:
       #ref = "refs/tags/matugen-v0.10.0";
     };
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
   };
 
   outputs = { nixpkgs, home-manager, self, ... } @ inputs: {
