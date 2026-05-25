@@ -40,7 +40,7 @@
     inverse-primary: {{colors.inverse_primary.default.hex}};
     surface-dim: {{colors.surface_dim.default.hex}};
     surface-bright: {{colors.surface_bright.default.hex}};
-    bgcolor: {{colors.surface_container_lowest.default.hex}}CC;
+    bgcolor: {{colors.surface_container_lowest.default.hex}}B3;
     darktxtcolor: {{colors.surface_container_lowest.default.hex}};
     surface-container-low: {{colors.surface_container_low.default.hex}};
     surface-container: {{colors.surface_container.default.hex}};

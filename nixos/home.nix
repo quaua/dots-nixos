@@ -105,7 +105,7 @@ in
       bold_font = "auto";
       bold_italic_font = "auto";
       font_size = "12.0";
-      background_opacity = "0.9";
+      background_opacity = "0.75";
       cursor_shape = "block";
       cursor_blink_interval = "0.5";
       confirm_os_window_close = 0;
@@ -219,4 +219,5 @@ in
   xdg.configFile."matugen/templates/hyprland-colors.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/hyprland-colors.conf";
   xdg.configFile."matugen/templates/nvim-colors.vim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/nvim-colors.vim";
   xdg.configFile."matugen/templates/gtk-colors.css".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/gtk-colors.css";
+  xdg.configFile."matugen/templates/telegram-colors".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/telegram-colors";
 }

@@ -38,4 +38,12 @@ output_path = '~/.config/gtk-3.0/colors.css'
 [templates.gtk4]
 input_path = './templates/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/colors.css'
-#post_hook = '~/.config/matugen/post-hook-scripts/gtk-themes-reload.sh'
+#post_hook = '~/nixos-config/matugenconf/gtk-themes-reload.sh'
+
+[templates.telegram]
+input_path = './templates/telegram-colors'
+output_path = '~/telegram.tdesktop-theme'
+
+[templates.quickshell]
+input_path = './templates/quickshell.json'
+output_path = '~/.local/state/quickshell/generated/colors.json'

@@ -16,3 +16,4 @@ change terminal prompt via starship
 mkOutOfStoreSymlink doesnt work
 MAKE MATUGEN TO WORK IN ALL APPS AND ENVIRONMENTS i.e. make all system colors as one
 spicetify and gtk matugen dont work have to fix it
+make telegram matugen work automatically

@@ -11,6 +11,7 @@ import Quickshell.Wayland
 
 ShellRoot {
   PanelWindow {
+    id: mainBarWindow
     anchors {
       top: true
       left: true
@@ -32,6 +33,7 @@ ShellRoot {
       id: bar
       anchors.fill: parent
       color: Qt.rgba(0 , 0 , 0 , 0.75)
+      //color: Colors.md3.background
       border.width: 0
       radius: 0
     }
@@ -167,9 +169,15 @@ ShellRoot {
 
 	    Process {
               id: runSteam
-	      command: ["sh", "-c", "steam"]
+	      command: ["sh", "-c", "steam steam://open/main"]
 	      running: false
-    	    }
+      	    }
+
+	    QsMenuAnchor {
+              id: trayMenuAnchor
+	      menu: modelData.menu
+	      anchor.window: mainBarWindow
+            }
 
 	    MouseArea {
 	      id: msTray
@@ -181,14 +189,21 @@ ShellRoot {
     		console.log("ID:    ", modelData.id)
     		console.log("Title: ", modelData.title)
    	 	console.log("-----------------------")      
-	        if (mouse.button === Qt.LeftButton) {
-                  if (modelData.id.toLowerCase() === "steam") {
+	        if ( mouse.button === Qt.LeftButton ) {
+                  if ( modelData.id.toLowerCase() === "steam" ) {
                     runSteam.running = true
 	          }
 	          else {
                     modelData.activate();
                   }
-                }
+	        }
+		else if ( mouse.button === Qt.RightButton ) {
+		  if ( modelData.hasMenu ) {
+		    var mappedCoords = msTray.mapToItem(mainBarWindow.contentItem, mouse.x, mouse.y);
+		    trayMenuAnchor.anchor.rect = Qt.rect(mappedCoords.x, mappedCoords.y, 0, 0);
+		    trayMenuAnchor.open();
+		  }
+		}
 	      }
             }
           }

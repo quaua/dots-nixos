@@ -78,6 +78,13 @@
     winetricks
     #adwsteamgtk
     wget
+    glib
+    gsettings-desktop-schemas
+    #--
+    libsForQt5.qtstyleplugin-kvantum
+    kdePackages.qtstyleplugin-kvantum
+    qt6Packages.qt6ct
+    libsForQt5.qt5ct
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -139,5 +146,13 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
+  };
+  #
+  # QT
+  #
+  qt = {
+    enable = true;
+    platformTheme = "qt5ct"; # Serves as the base platform theme wrapper
+    style = "kvantum";
   };
 }
