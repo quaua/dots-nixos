@@ -3,15 +3,16 @@ add calendar in quickshell
 make lock screen
 //add tray in quickshell DONE
 theme neovim
-//theme rofi DONE
+//theme rofi DONE partly
 //make screenshot work PARTLY DONE
 //customize yazi PARTLY DONE
 make yazi open as file chooser menu
 customize fastfetch (make aperture logo)
 make window rule for sxiv, vlc, and file chooser
-make matugen work
 make live wallpaper switcher
 make theme switcher when switching to a wallpaper via matugen and scripts
 change terminal prompt via starship
 //make quickshell workspaces interactive with mouse DONE
 mkOutOfStoreSymlink doesnt work
+MAKE MATUGEN TO WORK IN ALL APPS AND ENVIRONMENTS i.e. make all system colors as one
+spicetify and gtk matugen dont work have to fix it

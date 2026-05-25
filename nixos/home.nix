@@ -51,6 +51,12 @@ in
 	  on = [ "<C-n>" ];
 	  run = "shell -- xdragon -a -x -i -T \"$@\"";
 	}
+	{
+          on = "!";
+          "for" = "unix";
+          run = "shell \"$SHELL\" --block";
+          desc = "Open $SHELL here";
+        }
       ];
     };
     plugins = {
@@ -66,6 +72,12 @@ in
       vim.g.mapleader = " "
       vim.keymap.set({'n', 'x'}, '<leader>y', [["+y]], { desc = "Copy to system clipboard" })
       vim.keymap.set({'n', 'x'}, '<leader>p', [["+p]], { desc = "Paste from system clipboard" })
+
+      vim.cmd("colorscheme matugen")
+      vim.api.nvim_create_autocmd("Signal", {
+        pattern = "SIGUSR1",
+        command = "colorscheme matugen",
+      })
     '';
   };
 
@@ -110,6 +122,13 @@ in
 
   gtk = {
     enable = true;
+
+    gtk4.extraCss = ''
+      @import 'colors.css';
+    '';
+    gtk3.extraCss = ''
+      @import 'colors.css';
+    '';
     
     # Fonts
     font.name = "JetBrainsMono Nerd Font";
@@ -139,6 +158,7 @@ in
       "*" = {
         my-bg = mkLiteral "@bgcolor";
         my-fg = mkLiteral "@fgcolor";
+	border-color = mkLiteral "@bordercolor";
 	txtcolor = mkLiteral "@darktxtcolor";
 	text-color = mkLiteral "@textcolor";
         background-color = mkLiteral "transparent";
@@ -148,7 +168,7 @@ in
         width = mkLiteral "960px";
         background-color = mkLiteral "@my-bg";
         border = mkLiteral "2px";
-        border-color = mkLiteral "@my-fg";
+        border-color = mkLiteral "@border-color";
         border-radius = mkLiteral "4px";
 	# gap between apps and border of rofi
 	padding = mkLiteral "20px"; 
@@ -188,7 +208,6 @@ in
     ];
   };
 
-
   xdg.configFile."yazi/yazi.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/yaziconf/yazi.toml";
   xdg.configFile."yazi/init.lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/yaziconf/init.lua";
   xdg.configFile."matugen/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/config.toml";
@@ -197,4 +216,7 @@ in
   xdg.configFile."matugen/templates/spicetify-colors.ini".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/spicetify-colors.ini";
   xdg.configFile."matugen/templates/vesktop-colors.css".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/vesktop-colors.css";
   xdg.configFile."matugen/templates/rofi-colors.rasi".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/rofi-colors.rasi";
+  xdg.configFile."matugen/templates/hyprland-colors.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/hyprland-colors.conf";
+  xdg.configFile."matugen/templates/nvim-colors.vim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/nvim-colors.vim";
+  xdg.configFile."matugen/templates/gtk-colors.css".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/gtk-colors.css";
 }

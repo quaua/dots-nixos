@@ -11,7 +11,6 @@ output_path = '~/.config/yazi/theme.toml'
 [templates.spotify]
 input_path = './templates/spicetify-colors.ini'
 output_path = '~/.config/spicetify/Themes/Matugen/color.ini'
-post_hook = 'spicetify watch -s 2>&1 | sed "/Reloaded Spotify/q"'
 
 [templates.vesktop]
 input_path = './templates/vesktop-colors.css'
@@ -20,3 +19,23 @@ output_path = '~/.config/vesktop/themes/midnight-discord.css'
 [templates.rofi]
 input_path = './templates/rofi-colors.rasi'
 output_path = '~/.config/rofi/colors.rasi'
+
+[templates.hyprland]
+input_path = './templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/colors.conf'
+post_hook = 'hyprctl reload'
+
+[templates.nvim]
+input_path = './templates/nvim-colors.vim'
+output_path = '~/.config/nvim/colors/matugen.vim'
+#post_hook = 'pkill -SIGUSR1 nvim'
+
+[templates.gtk3]
+input_path = './templates/gtk-colors.css'
+output_path = '~/.config/gtk-3.0/colors.css'
+#post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
+
+[templates.gtk4]
+input_path = './templates/gtk-colors.css'
+output_path = '~/.config/gtk-4.0/colors.css'
+#post_hook = '~/.config/matugen/post-hook-scripts/gtk-themes-reload.sh'
