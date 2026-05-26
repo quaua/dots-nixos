@@ -32,8 +32,9 @@ ShellRoot {
     Rectangle {
       id: bar
       anchors.fill: parent
-      color: Qt.rgba(0 , 0 , 0 , 0.75)
-      //color: Colors.md3.background
+      //color: Qt.rgba(0 , 0 , 0 , 0.75)
+      color: Colors.md3.background
+      opacity: 0.85
       border.width: 0
       radius: 0
     }
@@ -44,7 +45,8 @@ ShellRoot {
       width: workspaces.width + 45
       height: Appearance.barHeight - 8
       radius: height/2 - 4
-      color: Qt.rgba(0 , 0 , 0 , 0.2)
+      //color: Qt.rgba(0 , 0 , 0 , 0.2)
+      color: Qt.alpha(Colors.md3.surface_container_lowest, 0.4)
       anchors.left: parent.left
       anchors.verticalCenter: parent.verticalCenter
       anchors.leftMargin: 15
@@ -65,12 +67,13 @@ ShellRoot {
 	    width: 10
 	    height: 10
 	    radius: width/2
-	    color: isFocused ? Qt.rgba(1 , 1 , 1 , 0.9) : ( isHovered ? Qt.rgba(1 , 1 , 1 , 0.55) : Qt.rgba(1 , 1 , 1 , 0.2) ) 
+	    color: isFocused ? Qt.rgba(1 , 1 , 1 , 0.9) : ( isHovered ? Qt.rgba(1 , 1 , 1 , 0.55) : Qt.rgba(1 , 1 , 1 , 0.2) )
+	    Behavior on color { ColorAnimation { duration: 100 } }
 	    Rectangle {
 	      width: 25
 	      height: 25
 	      radius: width/2
-	      color: ws ? Qt.rgba(1 , 1 , 1 , 0.1) : "transparent" 
+	      color: ws ? Qt.rgba(1 , 1 , 1 , 0.1) : "transparent"
 	      anchors.centerIn: parent
 
 	      MouseArea {
@@ -97,7 +100,8 @@ ShellRoot {
     Rectangle {
       id: timerBox
       anchors.centerIn: parent
-      color: timerClick.containsMouse ? Qt.rgba(1 , 1 , 1 , 0.05) : Qt.rgba(0 , 0 , 0 , 0.2)
+      //color: timerClick.containsMouse ? Qt.rgba(1 , 1 , 1 , 0.05) : Qt.rgba(0 , 0 , 0 , 0.2)
+      color: timerClick.containsMouse ? Qt.alpha(Colors.md3.surface_variant, 0.4) : Qt.alpha(Colors.md3.surface_container_lowest, 0.4)
       width: rowTime.width + 40
       height: Appearance.barHeight - 8
       radius: height/2 - 4
@@ -110,7 +114,7 @@ ShellRoot {
 
       Behavior on color {
         ColorAnimation {
-          duration: 300
+          duration: 200
           easing.type: Easing.OutCubic 
         }
       }
@@ -147,7 +151,8 @@ ShellRoot {
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
       anchors.rightMargin: 15
-      color: Qt.rgba(0 , 0 , 0 , 0.2)
+      //color: Qt.rgba(0 , 0 , 0 , 0.2)
+      color: Qt.alpha(Colors.md3.surface_container_lowest, 0.4)
       width: trays.width + 16
       height: Appearance.barHeight - 8
       radius: height/2 - 4

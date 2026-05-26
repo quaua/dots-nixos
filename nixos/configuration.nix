@@ -78,6 +78,7 @@
     winetricks
     #adwsteamgtk
     wget
+    baobab
     glib
     gsettings-desktop-schemas
     #--
