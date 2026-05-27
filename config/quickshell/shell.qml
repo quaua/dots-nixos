@@ -156,6 +156,7 @@ ShellRoot {
       width: trays.width + 16
       height: Appearance.barHeight - 8
       radius: height/2 - 4
+      visible: SystemTray.items.values.length > 0
       Row {
 	id: trays
 	spacing: 8

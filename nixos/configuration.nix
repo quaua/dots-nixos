@@ -45,13 +45,12 @@
     firefox
     vesktop
     swaynotificationcenter
+    nwg-look
     quickshell
     rofi
     yazi
     pavucontrol
     steam
-    feh
-    sxiv
     unzip
     ffmpeg-full
     telegram-desktop
@@ -60,6 +59,7 @@
     cliphist
     dragon-drop
     gimp
+    loupe
     fastfetch
     morewaita-icon-theme
     grim

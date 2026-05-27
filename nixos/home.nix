@@ -68,6 +68,7 @@ in
   programs.neovim = {
     enable = true;
     initLua = ''
+      vim.opt.number = true
       vim.opt.relativenumber = true
       vim.g.mapleader = " "
       vim.keymap.set({'n', 'x'}, '<leader>y', [["+y]], { desc = "Copy to system clipboard" })
@@ -82,16 +83,10 @@ in
   };
 
   xdg.desktopEntries = {
-    feh = {
-      name = "feh";
-      exec = "feh -. -Z %u";
-      mimeType = [ "image/jpeg" "image/png" ];
-      terminal = false;
-    };
-    sxiv = {
-      name = "sxiv";
-      exec = "sxiv -a %u";
-      mimeType = [ "image/gif" ];
+    "org.gnome.Loupe" = {
+      name = "Loupe";
+      exec = "loupe %F";
+      mimeType = [ "image/jpeg" "image/png" "image/gif" "image/webp" "image/tiff" ];
       terminal = false;
     };
   };
@@ -165,7 +160,7 @@ in
       };
 
       "window" = {
-        width = mkLiteral "960px";
+        width = mkLiteral "660px";
         background-color = mkLiteral "@my-bg";
         border = mkLiteral "2px";
         border-color = mkLiteral "@border-color";
