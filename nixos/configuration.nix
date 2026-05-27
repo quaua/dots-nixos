@@ -81,11 +81,7 @@
     baobab
     glib
     gsettings-desktop-schemas
-    #--
-    libsForQt5.qtstyleplugin-kvantum
-    kdePackages.qtstyleplugin-kvantum
-    qt6Packages.qt6ct
-    libsForQt5.qt5ct
+    mangohud
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -149,11 +145,8 @@
     jack.enable = true;
   };
   #
-  # QT
+  # STEAM
   #
-  qt = {
-    enable = true;
-    platformTheme = "qt5ct"; # Serves as the base platform theme wrapper
-    style = "kvantum";
-  };
+  programs.steam.gamescopeSession.enable = true;
+  programs.gamemode.enable = true;
 }

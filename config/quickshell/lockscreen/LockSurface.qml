@@ -22,6 +22,7 @@ Rectangle {
 		text: "Welcome, " + Quickshell.env("USER")
 		color: "white"
 		font.pointSize: 20
+		font.family: "JetBrainsMono Nerd Font"
 
 		anchors {
 			horizontalCenter: root.horizontalCenter
@@ -34,6 +35,7 @@ Rectangle {
 		id: clock
 		property var date: new Date()
 		color: "white"
+		font.family: "JetBrainsMono Nerd Font"
 
 		anchors {
 			horizontalCenter: parent.horizontalCenter
@@ -74,6 +76,7 @@ Rectangle {
 		RowLayout {
 			TextField {
 				id: passwordBox
+				cursorDelegate: Item {}
 				background: Rectangle {
       					color: "white"
     					radius: 200
@@ -111,6 +114,7 @@ Rectangle {
 			visible: root.context.showFailure
 			text: "Incorrect password"
 			color: "white"
+			font.family: "JetBrainsMono Nerd Font"
 		}
 	}
 }
