@@ -82,6 +82,8 @@
     glib
     gsettings-desktop-schemas
     mangohud
+    libreoffice
+    protontricks
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono

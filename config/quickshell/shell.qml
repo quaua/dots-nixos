@@ -144,6 +144,82 @@ ShellRoot {
         }
       }
     }
+    
+    //Language Indicator
+    Rectangle {
+      id: langBox
+
+      property string layoutName: "??"
+      property string layoutShort: layoutName.substring(0, 2).toUpperCase()
+
+      width: lang.width + 16
+      height: Appearance.barHeight - 8
+      radius: height/2 - 4
+      anchors.right: trayBox.left
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.rightMargin: 4
+      color: msLang.containsMouse ? Qt.alpha(Colors.md3.surface_variant, 0.4) : Qt.alpha(Colors.md3.surface_container_lowest, 0.4)
+
+      Process {
+        id: fetchLayout
+        command: ["hyprctl", "devices", "-j"]
+        running: true
+        stdout: StdioCollector {
+          onStreamFinished: {
+            try {
+              const kbs = JSON.parse(this.text).keyboards
+              const main = kbs.find(k => k.main) ?? kbs[0]
+              if (main) langBox.layoutName = main.active_keymap
+            } catch(e) {}
+          }
+        }
+      }
+
+      Process {
+        id: switchLayout
+        command: ["hyprctl", "switchxkblayout", "all", "next"]
+      }
+
+      Connections {
+        target: Hyprland
+        function onRawEvent(event) {
+          if (event.name === "activelayout")
+            langBox.layoutName = event.data.split(",").pop().trim()
+        }
+      }
+      
+      MouseArea {
+        id: msLang
+        anchors.fill: parent
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: (mouse) => {
+          if ( mouse.button === Qt.LeftButton ) {
+	    switchLayout.running = true
+    	  }
+	  else {
+	    console.log("ПКМ нажал")
+	  }
+	}
+      }
+
+      Behavior on color {
+        ColorAnimation {
+          duration: 200
+          easing.type: Easing.OutCubic 
+        }
+      }
+
+      Text {
+	id: lang
+        text: langBox.layoutShort
+        font.pixelSize: 16
+	font.family: Globals.fontFamily
+	color: "white"
+	anchors.centerIn: parent
+	font.bold: true
+      }
+    }
 
     //Tray
     Rectangle {
@@ -173,12 +249,6 @@ ShellRoot {
               fillMode: Image.PreserveAspectFit
             }
 
-	    Process {
-              id: runSteam
-	      command: ["sh", "-c", "steam steam://open/main"]
-	      running: false
-      	    }
-
 	    QsMenuAnchor {
               id: trayMenuAnchor
 	      menu: modelData.menu
@@ -196,12 +266,7 @@ ShellRoot {
     		console.log("Title: ", modelData.title)
    	 	console.log("-----------------------")      
 	        if ( mouse.button === Qt.LeftButton ) {
-                  if ( modelData.id.toLowerCase() === "steam" ) {
-                    runSteam.running = true
-	          }
-	          else {
-                    modelData.activate();
-                  }
+                  modelData.activate();
 	        }
 		else if ( mouse.button === Qt.RightButton ) {
 		  if ( modelData.hasMenu ) {

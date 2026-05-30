@@ -18,3 +18,4 @@ MAKE MATUGEN TO WORK IN ALL APPS AND ENVIRONMENTS i.e. make all system colors as
 spicetify and gtk matugen dont work have to fix it
 make telegram matugen work automatically
 fix suspend
+add language in quickshell bar
