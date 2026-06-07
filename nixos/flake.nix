@@ -14,6 +14,11 @@
       #ref = "refs/tags/matugen-v0.10.0";
     };
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { nixpkgs, home-manager, self, ... } @ inputs: {

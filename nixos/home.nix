@@ -79,6 +79,12 @@ in
         pattern = "SIGUSR1",
         command = "colorscheme matugen",
       })
+
+      
+  vim.opt.tabstop = 4
+  vim.opt.shiftwidth = 4
+  vim.opt.softtabstop = 4
+  vim.opt.expandtab = true
     '';
   };
 
@@ -88,6 +94,13 @@ in
       exec = "loupe %F";
       mimeType = [ "image/jpeg" "image/png" "image/gif" "image/webp" "image/tiff" ];
       terminal = false;
+    };
+    vlc = {
+      name = "VLC media player";
+      exec = "vlc %U";
+      icon = "vlc";
+      categories = [ "AudioVideo" "Player" ];
+      mimeType = [ "video/mp4" "video/mkv" "video/x-matroska" ];
     };
   };
 

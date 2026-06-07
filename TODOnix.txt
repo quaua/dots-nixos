@@ -19,3 +19,11 @@ spicetify and gtk matugen dont work have to fix it
 make telegram matugen work automatically
 fix suspend
 add language in quickshell bar
+make obsidian cursor auto apply at fresh install
+make cache nixos org download speed faster
+add volume control quickshell bar
+add volume binds
+make device as default audio
+fix hyprland frame drops
+style swaync and add notification center and add notification sound
+make install.sh work on clean build nixos without any error

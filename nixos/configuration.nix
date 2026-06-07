@@ -39,6 +39,7 @@
   environment.systemPackages = with pkgs; [
     inputs.matugen.packages.x86_64-linux.default
     inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     neovim
     git
     kitty
@@ -84,7 +85,9 @@
     mangohud
     libreoffice
     protontricks
+    gamescope
     btop
+    shotcut
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -98,10 +101,10 @@
   boot.blacklistedKernelModules = [ "nouveau" ];
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics.enable = true; # Enable OpenGL
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   hardware.nvidia = {
     modesetting.enable = true; # modesetting is required
-    powerManagement.enable = false;
+    powerManagement.enable = true;
     powerManagement.finegrained = false;
     open = true; # Use open source drivers
   };
