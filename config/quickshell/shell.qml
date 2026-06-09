@@ -105,68 +105,86 @@ PanelWindow {
             anchor.window: mainBarWindow
             anchor.rect.x: mainBarWindow.width / 2 - implicitWidth / 2
             anchor.rect.y: mainBarWindow.implicitHeight + 4
-            implicitWidth: 1450
-            implicitHeight: 700
+            implicitWidth: 700
+            implicitHeight: 400
             color: "transparent"
             visible: false
 
             Rectangle {
                 id: surfacecalweaPopup
                 anchors.fill: parent
-                color: Qt.alpha(Colors.md3.background, 1)
-                radius: 8
+                color: Qt.alpha(Colors.md3.surface_container_lowest, 1)
+                border.width: 1
+                border.color: Qt.alpha(Colors.md3.primary, 0.35)
+                radius: 10
 
-                Rectangle {
-                    id: calendar
-                    width: calweaPopup.implicitWidth / 4
-                    height: calweaPopup.implicitHeight / 2
-                    color: Qt.alpha(Colors.md3.surface_container_low, 0.4)
-                    border.width: 1
-                    border.color: Qt.alpha(Colors.md3.outline_variant, 0.5)
-                    radius: 8
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.leftMargin: 32
-                    anchors.topMargin: 32
+                RowLayout {
+                    anchors.fill: parent
+                    spacing: 4
+                    Rectangle {
+                        id: calendar
+                        color: "transparent"
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.margins: 32
+                        Layout.rightMargin: 0
 
+                        Text {
+                            text: "CALENDAR"
+                            Layout.alignment: Qt.AlignTop
+                            font.pixelSize: 14
+                            font.weight: 1000
+                            font.family: Globals.fontFamily
+                            font.letterSpacing: 1.5
+                            color: Qt.alpha(Colors.md3.primary, 0.5)
+                        }
+                        
+                    //----
                     property date currentDate: new Date()
+
+                    Timer {
+                        interval: 1000
+                        running: true
+                        repeat: true
+                        onTriggered: calendar.currentDate = new Date()
+                    }
 
                     ColumnLayout {
                         anchors.fill: parent
-                        anchors.margins: 16
-                        spacing: 10
+                        anchors.topMargin: 32
 
                         // Month and Year Header
                         Text {
-                            text: Qt.formatDate(new Date(), "MMMM yyyy")
-                            font.bold: true
-                            font.pixelSize: 18
-                            color: "white" // Change to match your theme
-                            Layout.alignment: Qt.AlignHCenter
+                            text: Qt.formatDate(calendar.currentDate, "MMMM yyyy")
+                            font.weight: 1000
+                            font.pixelSize: 22
+                            font.family: Globals.fontFamily
+                            color: "white"
                         }
 
-                        // Days of the week header (e.g., Mon, Tue...)
                         DayOfWeekRow {
-                            locale: Qt.locale("en_US") // Adjust locale as needed
+                            locale: Qt.locale("en_GB")
                             Layout.fillWidth: true
+                            Layout.bottomMargin: 4
+                            Layout.topMargin: 4
 
                             delegate: Text {
                                 required property var model
-                                text: model.shortName  // Mon, Tue, Wed etc
-                                color: "white"
-                                font.bold: true
-                                font.pixelSize: 12
+                                text: model.longName.substring(0, 2)
+                                color: Qt.alpha(Colors.md3.primary, 0.5)
+                                font.pixelSize: 14
+                                font.family: Globals.fontFamily
+                                font.weight: 700
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
                         }
 
-                        // The actual calendar grid
                         MonthGrid {
                             id: monthGrid
-                            month: new Date().getMonth()
-                            year: new Date().getFullYear()
-                            locale: Qt.locale("en_US")
+                            month: calendar.currentDate.getMonth()
+                            year: calendar.currentDate.getFullYear()
+                            locale: Qt.locale("en_GB")
                             Layout.fillWidth: true
                             Layout.fillHeight: true
 
@@ -175,8 +193,8 @@ PanelWindow {
         
                                 Rectangle {
                                     anchors.centerIn: parent
-                                    width: 28
-                                    height: 28
+                                    width: 40
+                                    height: 30
                                     radius: 8
                                     color: model.today ? Colors.md3.primary : "transparent"
                                 }
@@ -184,15 +202,28 @@ PanelWindow {
                                 Text {
                                     anchors.centerIn: parent
                                     text: model.day
-                                    color: model.today ? Colors.md3.on_primary : "white"
-                                    font.bold: true
-                                    opacity: model.month === monthGrid.month ? 1.0 : 0.3
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
+                                    color: model.month === monthGrid.month ? (model.today ? Colors.md3.on_primary : "white") : Colors.md3.on_surface
+                                    font.pixelSize: 14
+                                    font.family: Globals.fontFamily
+                                    font.weight: model.today ? 1000 : 600
+                                    opacity: model.month === monthGrid.month ? 1.0 : 0.2
                                 }
                             }
                         }
                     }
+                    //----
+
+                    }
+                    Rectangle {
+                        id: weather
+                        color: "transparent"
+                        //border.width: 1 //delete
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.margins: 32
+                        Layout.leftMargin: 0
+                    }
+
                 }
             }
         }
@@ -232,7 +263,7 @@ PanelWindow {
                     color: "white"
                     font.pixelSize: 16
                     font.family: Globals.fontFamily
-                    font.bold: true
+                    font.weight: 800
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -317,9 +348,9 @@ PanelWindow {
                 text: langBox.layoutShort
                 font.pixelSize: 16
                 font.family: Globals.fontFamily
+                font.weight: 800
                 color: "white"
                 anchors.centerIn: parent
-                font.bold: true
             }
         }
 

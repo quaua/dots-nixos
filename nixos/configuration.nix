@@ -104,7 +104,7 @@
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   hardware.nvidia = {
     modesetting.enable = true; # modesetting is required
-    powerManagement.enable = true;
+    powerManagement.enable = false;
     powerManagement.finegrained = false;
     open = true; # Use open source drivers
   };
