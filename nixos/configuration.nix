@@ -37,6 +37,11 @@
 
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
+    
+    (python3.withPackages (p: with p; [ 
+        requests
+    ]))
+
     inputs.matugen.packages.x86_64-linux.default
     inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -77,7 +82,6 @@
     home-manager
     wineWow64Packages.stable
     winetricks
-    #adwsteamgtk
     wget
     baobab
     glib
@@ -88,6 +92,8 @@
     gamescope
     btop
     shotcut
+    libfaketime
+    starship
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono

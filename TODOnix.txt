@@ -27,3 +27,4 @@ make device as default audio
 fix hyprland frame drops
 style swaync and add notification center and add notification sound
 make install.sh work on clean build nixos without any error
+calendar doesnt update days live, only when restarting. Need to fix

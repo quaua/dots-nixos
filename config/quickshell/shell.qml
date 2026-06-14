@@ -12,8 +12,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ShellRoot {
-PanelWindow {
-    id: mainBarWindow
+    PanelWindow {
+        id: mainBarWindow
         anchors {
             top: true
             left: true
@@ -30,13 +30,11 @@ PanelWindow {
         implicitHeight: Appearance.barHeight 
         color: "transparent"
 
-        // Border + Background Rectangle
         Rectangle {
             id: bar
             anchors.fill: parent
-            //color: Qt.rgba(0 , 0 , 0 , 0.75)
             color: Colors.md3.background
-            opacity: 0.85
+            opacity: 0.6
             border.width: 0
             radius: 0
         }
@@ -47,7 +45,6 @@ PanelWindow {
             width: workspaces.width + 45
             height: Appearance.barHeight - 8
             radius: height/2 - 4
-            //color: Qt.rgba(0 , 0 , 0 , 0.2)
             color: Qt.alpha(Colors.md3.surface_container_lowest, 0.4)
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -100,11 +97,14 @@ PanelWindow {
         }
 
         //Calendar PopUp
-        PopupWindow {
+        PanelWindow {
             id: calweaPopup
-            anchor.window: mainBarWindow
-            anchor.rect.x: mainBarWindow.width / 2 - implicitWidth / 2
-            anchor.rect.y: mainBarWindow.implicitHeight + 4
+            WlrLayershell.namespace: "calweaPopup"
+            WlrLayershell.layer: WlrLayer.Top
+            exclusionMode: ExclusionMode.Ignore
+            anchors.top: true
+            margins.top: mainBarWindow.implicitHeight + 4
+            margins.left: mainBarWindow.width / 2 - implicitWidth / 2
             implicitWidth: 700
             implicitHeight: 400
             color: "transparent"
@@ -113,14 +113,14 @@ PanelWindow {
             Rectangle {
                 id: surfacecalweaPopup
                 anchors.fill: parent
-                color: Qt.alpha(Colors.md3.surface_container_lowest, 1)
+                color: Qt.alpha(Colors.md3.surface_container_lowest, 0.8)
                 border.width: 1
                 border.color: Qt.alpha(Colors.md3.primary, 0.35)
                 radius: 10
 
                 RowLayout {
                     anchors.fill: parent
-                    spacing: 4
+                    spacing: 16
                     Rectangle {
                         id: calendar
                         color: "transparent"
@@ -131,99 +131,278 @@ PanelWindow {
 
                         Text {
                             text: "CALENDAR"
-                            Layout.alignment: Qt.AlignTop
                             font.pixelSize: 14
                             font.weight: 1000
                             font.family: Globals.fontFamily
                             font.letterSpacing: 1.5
                             color: Qt.alpha(Colors.md3.primary, 0.5)
                         }
-                        
-                    //----
-                    property date currentDate: new Date()
 
-                    Timer {
-                        interval: 1000
-                        running: true
-                        repeat: true
-                        onTriggered: calendar.currentDate = new Date()
-                    }
+                        //----
+                        property date currentDate: new Date()
 
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.topMargin: 32
-
-                        // Month and Year Header
-                        Text {
-                            text: Qt.formatDate(calendar.currentDate, "MMMM yyyy")
-                            font.weight: 1000
-                            font.pixelSize: 22
-                            font.family: Globals.fontFamily
-                            color: "white"
-                        }
-
-                        DayOfWeekRow {
-                            locale: Qt.locale("en_GB")
-                            Layout.fillWidth: true
-                            Layout.bottomMargin: 4
-                            Layout.topMargin: 4
-
-                            delegate: Text {
-                                required property var model
-                                text: model.longName.substring(0, 2)
-                                color: Qt.alpha(Colors.md3.primary, 0.5)
-                                font.pixelSize: 14
-                                font.family: Globals.fontFamily
-                                font.weight: 700
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
+                        Timer {
+                            interval: 1000 //change to 1 minute interval
+                            running: true
+                            repeat: true
+                            triggeredOnStart: true
+                            onTriggered: {
+                                calendar.currentDate = new Date()
                             }
                         }
 
-                        MonthGrid {
-                            id: monthGrid
-                            month: calendar.currentDate.getMonth()
-                            year: calendar.currentDate.getFullYear()
-                            locale: Qt.locale("en_GB")
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
+                        ColumnLayout {
+                            anchors.fill: parent
+                            anchors.topMargin: 32
 
-                            delegate: Item {
-                                required property var model
-        
-                                Rectangle {
-                                    anchors.centerIn: parent
-                                    width: 40
-                                    height: 30
-                                    radius: 8
-                                    color: model.today ? Colors.md3.primary : "transparent"
-                                }
+                            // Month and Year Header
+                            Text {
+                                text: Qt.formatDate(calendar.currentDate, "MMMM yyyy")
+                                font.weight: 1000
+                                font.pixelSize: 22
+                                font.family: Globals.fontFamily
+                                color: "white"
+                            }
 
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: model.day
-                                    color: model.month === monthGrid.month ? (model.today ? Colors.md3.on_primary : "white") : Colors.md3.on_surface
+                            DayOfWeekRow {
+                                locale: Qt.locale("en_GB")
+                                Layout.fillWidth: true
+                                Layout.bottomMargin: 4
+                                Layout.topMargin: 4
+
+                                delegate: Text {
+                                    text: model.longName.substring(0, 2)
+                                    color: Qt.alpha(Colors.md3.primary, 0.5)
                                     font.pixelSize: 14
                                     font.family: Globals.fontFamily
-                                    font.weight: model.today ? 1000 : 600
-                                    opacity: model.month === monthGrid.month ? 1.0 : 0.2
+                                    font.weight: 700
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+                            }
+
+                            MonthGrid {
+                                id: monthGrid
+                                month: calendar.currentDate.getMonth()
+                                year: calendar.currentDate.getFullYear()
+                                locale: Qt.locale("en_GB")
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+
+                                delegate: Item {
+                                    id: delegateMonth
+                                    required property var model
+
+                                    property bool isToday:
+                                    model.day === calendar.currentDate.getDate() &&
+                                    model.month === calendar.currentDate.getMonth() &&
+                                    model.year === calendar.currentDate.getFullYear()
+
+                                    property bool isThisMonth:
+                                    model.month === calendar.currentDate.getMonth() &&
+                                    model.year === calendar.currentDate.getFullYear()
+                                    property bool isThisYear:
+                                    model.year === calendar.currentDate.getFullYear()
+
+                                    Rectangle {
+                                        anchors.centerIn: parent
+                                        width: 40
+                                        height: 30
+                                        radius: 8
+                                        color: isToday ? Colors.md3.primary : "transparent"
+                                    }
+
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: model.day
+                                        color: isThisMonth ? (isToday ? Colors.md3.on_primary : "white") : Colors.md3.on_surface
+                                        font.pixelSize: 14
+                                        font.family: Globals.fontFamily
+                                        font.weight: isToday ? 1000 : 600
+                                        opacity: isThisMonth ? 1.0 : 0.2
+                                    }
                                 }
                             }
                         }
                     }
-                    //----
 
+                    //------------------------------------------
+                    Process {
+                        property int weatherTemp: 0
+                        property int weatherFeelsLike: 0
+                        property int weatherHumidity: 0
+                        property int weatherWindSpeed: 0
+                        property string cityName: ""
+                        property string weatherDesc: ""
+                        property bool dataLoaded: false
+
+                        id: weatherReader
+                        running: false
+                        command: ["bash", "-c", "python $HOME/DESKTOPdir/pythonScripts/weather.py"]
+
+                        stdout: StdioCollector {
+                            onStreamFinished: {
+                                try {
+                                    let data = JSON.parse(this.text)
+                                    weatherReader.weatherTemp = Math.round(data.main.temp)
+                                    weatherReader.weatherFeelsLike = Math.round(data.main.feels_like)
+                                    weatherReader.weatherHumidity = data.main.humidity
+                                    weatherReader.weatherWindSpeed = Math.round(data.wind.speed)
+                                    weatherReader.cityName = data.name
+                                    weatherReader.weatherDesc = data.weather[0].description
+                                    console.log(data)
+                                    console.log("Temperature: " + weatherReader.weatherTemp)
+                                    console.log("Feels Like: " + weatherReader.weatherFeelsLike)
+                                    console.log("Humidity: " + weatherReader.weatherHumidity)
+                                    console.log("Wind: " + weatherReader.weatherWindSpeed)
+                                    console.log("City: " + weatherReader.cityName)
+                                    console.log("Description: " + weatherReader.weatherDesc)
+                                    weatherReader.dataLoaded = true
+                                } catch(e) { console.log("ERROR: " + e) }
+                            }
+                        }
                     }
+
+                    Timer {
+                        interval: 600000
+                        running: true
+                        repeat: true
+                        triggeredOnStart: true
+                        onTriggered: {
+                            weatherReader.running = true
+                        }
+                    }
+                    //------------------------------------------
+
+
                     Rectangle {
                         id: weather
                         color: "transparent"
-                        //border.width: 1 //delete
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.margins: 32
                         Layout.leftMargin: 0
-                    }
+                        //border.width: 1 //delete
 
+                        ColumnLayout {
+                            anchors.fill: parent
+                            spacing: 0
+
+                            Text {
+                                text: "WEATHER — " + (weatherReader.dataLoaded ? weatherReader.cityName.toUpperCase() : "ERROR")
+                                Layout.alignment: Qt.AlignTop
+                                font.pixelSize: 14
+                                font.weight: 1000
+                                font.family: Globals.fontFamily
+                                font.letterSpacing: 1.5
+                                color: Qt.alpha(Colors.md3.primary, 0.5)
+                            }
+                            RowLayout {
+                                spacing: -4
+                                Layout.alignment: Qt.AlignTop
+                                Text {
+                                    text: (weatherReader.dataLoaded ? weatherReader.weatherTemp : "ERR")
+                                    Layout.topMargin: 2
+                                    font.weight: 1000
+                                    font.family: Globals.fontFamily
+                                    font.pixelSize: 52
+                                    color: Colors.md3.on_surface
+                                }
+                                Text {
+                                    text: "°C"
+                                    Layout.topMargin: 2
+                                    Layout.bottomMargin: 32
+                                    font.weight: 1000
+                                    font.family: Globals.fontFamily
+                                    font.pixelSize: 24
+                                    color: Qt.alpha(Colors.md3.on_surface, 0.6)
+                                }
+                            }
+                            Text {
+                                text: (weatherReader.dataLoaded ? weatherReader.weatherDesc.charAt(0).toUpperCase() + weatherReader.weatherDesc.slice(1) : "ERROR")
+                                Layout.topMargin: -12
+                                Layout.bottomMargin: 14
+                                Layout.alignment: Qt.AlignTop
+                                font.weight: 700
+                                font.family: Globals.fontFamily
+                                font.pixelSize: 14
+                                color: Qt.alpha(Colors.md3.on_surface, 0.5)
+                            }
+                            RowLayout {
+                                spacing: 8
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 62
+
+                                Repeater {
+                                    model: [
+                                        { label: "HUMIDITY",   value: weatherReader.dataLoaded ? weatherReader.weatherHumidity + "%" : "ERR" },
+                                        { label: "WIND",       value: weatherReader.dataLoaded ? weatherReader.weatherWindSpeed + " m/s" : "ERR" },
+                                        { label: "FEELS LIKE", value: weatherReader.dataLoaded ? weatherReader.weatherFeelsLike + "°C" : "ERR" }
+                                    ]
+
+                                    Rectangle {
+                                        height: 62
+                                        Layout.fillWidth: true
+                                        color: Qt.alpha(Colors.md3.primary, 0.06)
+                                        border.width: 1
+                                        border.color: Qt.alpha(Colors.md3.primary, 0.1)
+                                        radius: 8
+
+                                        ColumnLayout {
+                                            anchors.left: parent.left
+                                            spacing: 4
+
+                                            Text {
+                                                text: modelData.label
+                                                Layout.topMargin: 10
+                                                Layout.leftMargin: 12
+                                                font.pixelSize: 11
+                                                font.weight: 700
+                                                font.letterSpacing: 1.3
+                                                color: Qt.alpha(Colors.md3.on_surface, 0.35)
+                                                font.family: Globals.fontFamily
+                                            }
+
+                                            Text {
+                                                text: modelData.value
+                                                Layout.leftMargin: 12
+                                                font.pixelSize: 18
+                                                font.weight: 1000
+                                                color: Colors.md3.on_surface
+                                                font.family: Globals.fontFamily
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            Text {
+                                text: "5-DAY FORECAST"
+                                Layout.topMargin: 8
+                                Layout.bottomMargin: 4
+                                font.weight: 800
+                                font.family: Globals.fontFamily
+                                font.letterSpacing: 1.5
+                                color: Qt.alpha(Colors.md3.primary, 0.45)
+                                font.pixelSize: 13
+                            }
+                            RowLayout {
+                                spacing: 6
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 100
+                                Repeater {
+                                    model: 5
+                                    Rectangle {
+                                        Layout.fillWidth: true
+                                        height: 100
+                                        color: Qt.alpha(Colors.md3.primary, 0.05)
+                                        border.width: 1
+                                        border.color: Qt.alpha(Colors.md3.primary, 0.08)
+                                        radius: 8
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -232,7 +411,6 @@ PanelWindow {
         Rectangle {
             id: timerBox
             anchors.centerIn: parent
-            //color: timerClick.containsMouse ? Qt.rgba(1 , 1 , 1 , 0.05) : Qt.rgba(0 , 0 , 0 , 0.2)
             color: timerClick.containsMouse ? Qt.alpha(Colors.md3.surface_variant, 0.4) : Qt.alpha(Colors.md3.surface_container_lowest, 0.4)
             width: rowTime.width + 40
             height: Appearance.barHeight - 8
@@ -271,6 +449,7 @@ PanelWindow {
                     interval: 1000
                     running: true
                     repeat: true
+                    triggeredOnStart: true
                     onTriggered: {
                         time.text = Qt.formatDateTime(new Date(), "HH:mm ddd, dd/MM")
                     }
@@ -360,7 +539,6 @@ PanelWindow {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin: 15
-            //color: Qt.rgba(0 , 0 , 0 , 0.2)
             color: Qt.alpha(Colors.md3.surface_container_lowest, 0.4)
             width: trays.width + 16
             height: Appearance.barHeight - 8

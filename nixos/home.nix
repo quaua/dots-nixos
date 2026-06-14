@@ -1,8 +1,6 @@
 { config, pkgs, inputs, ... }:
 
 let
-  #dotfiles = "/home/jaga/nixos-config";
-  #yaziPath = "/home/jaga/nixos-config/nixos/yaziconf";
 in
 
 {
@@ -73,12 +71,16 @@ in
       vim.g.mapleader = " "
       vim.keymap.set({'n', 'x'}, '<leader>y', [["+y]], { desc = "Copy to system clipboard" })
       vim.keymap.set({'n', 'x'}, '<leader>p', [["+p]], { desc = "Paste from system clipboard" })
+      vim.keymap.set({'n', 'x'}, '<leader>d', [["+d]], { desc = "Cut/Copy to system clipboard and delete" })
 
       vim.cmd("colorscheme matugen")
       vim.api.nvim_create_autocmd("Signal", {
         pattern = "SIGUSR1",
         command = "colorscheme matugen",
       })
+
+      vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+      vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
       
   vim.opt.tabstop = 4
@@ -113,7 +115,7 @@ in
       bold_font = "auto";
       bold_italic_font = "auto";
       font_size = "12.0";
-      background_opacity = "0.75";
+      background_opacity = "0.4";
       cursor_shape = "block";
       cursor_blink_interval = "0.5";
       confirm_os_window_close = 0;
@@ -122,6 +124,7 @@ in
       open_url_with = "default";
       window_border_width = "1";
       window_margin_width = "5";
+      background = "#0a0e14";
     };
     extraConfig = ''
       include colors.conf
@@ -203,6 +206,39 @@ in
         text-color = mkLiteral "inherit";
       };
     };
+  };
+
+  programs.fastfetch = {
+    enable = true;
+    settings = {
+        "$schema" = "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json";
+        logo = {
+          type = "small";
+        };
+
+    modules = [
+      "title"
+      "separator"
+      "os"
+      "uptime"
+      "packages"
+      "de"
+      "wm"
+      "cpu"
+      "gpu"
+      "memory"
+      "disk"
+      "battery"
+      "poweradapter"
+      "colors"
+    ];
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    
   };
 
   programs.spicetify =
