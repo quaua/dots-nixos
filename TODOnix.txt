@@ -1,30 +1,29 @@
 add power menu in quickshell
-add calendar in quickshell
-make lock screen
-//add tray in quickshell DONE
-theme neovim
-//theme rofi DONE partly
+//add calendar in quickshell PARTLY DONE
+//make lock screen HAVE TO RICE IT
+//add tray in quickshell HAVE TO RICE CONTEXT MENU
+//theme neovim PARTLY DONE
+//theme rofi DONE
 //make screenshot work PARTLY DONE
-//customize yazi PARTLY DONE
+//customize yazi DONE
 make yazi open as file chooser menu
-customize fastfetch (make aperture logo)
-make window rule for sxiv, vlc, and file chooser
+customize fastfetch
 make live wallpaper switcher
 make theme switcher when switching to a wallpaper via matugen and scripts
 change terminal prompt via starship
 //make quickshell workspaces interactive with mouse DONE
-mkOutOfStoreSymlink doesnt work
-MAKE MATUGEN TO WORK IN ALL APPS AND ENVIRONMENTS i.e. make all system colors as one
+//mkOutOfStoreSymlink doesnt work IT SEEMS TO WORK??? BUT STILL SHOWS SYMLINK TO NIX/STORE FOR SOME REASON
 spicetify and gtk matugen dont work have to fix it
-make telegram matugen work automatically
 fix suspend
-add language in quickshell bar
+//add language in quickshell bar DONE
 make obsidian cursor auto apply at fresh install
 make cache nixos org download speed faster
 add volume control quickshell bar
 add volume binds
-make device as default audio
 fix hyprland frame drops
 style swaync and add notification center and add notification sound
 make install.sh work on clean build nixos without any error
-calendar doesnt update days live, only when restarting. Need to fix
+//calendar doesnt update days live, only when restarting. Need to fix DONE
+make automatic timezones and location change for system
+make quickshell weather fetch work together out of the box
+add calendar months switcher. i.e. make buttons that will scroll months

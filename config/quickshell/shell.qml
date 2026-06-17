@@ -103,7 +103,7 @@ ShellRoot {
             WlrLayershell.layer: WlrLayer.Top
             exclusionMode: ExclusionMode.Ignore
             anchors.top: true
-            margins.top: mainBarWindow.implicitHeight + 4
+            margins.top: mainBarWindow.implicitHeight + 8
             margins.left: mainBarWindow.width / 2 - implicitWidth / 2
             implicitWidth: 700
             implicitHeight: 400
@@ -114,8 +114,6 @@ ShellRoot {
                 id: surfacecalweaPopup
                 anchors.fill: parent
                 color: Qt.alpha(Colors.md3.surface_container_lowest, 0.8)
-                border.width: 1
-                border.color: Qt.alpha(Colors.md3.primary, 0.35)
                 radius: 10
 
                 RowLayout {
@@ -250,13 +248,6 @@ ShellRoot {
                                     weatherReader.weatherWindSpeed = Math.round(data.wind.speed)
                                     weatherReader.cityName = data.name
                                     weatherReader.weatherDesc = data.weather[0].description
-                                    console.log(data)
-                                    console.log("Temperature: " + weatherReader.weatherTemp)
-                                    console.log("Feels Like: " + weatherReader.weatherFeelsLike)
-                                    console.log("Humidity: " + weatherReader.weatherHumidity)
-                                    console.log("Wind: " + weatherReader.weatherWindSpeed)
-                                    console.log("City: " + weatherReader.cityName)
-                                    console.log("Description: " + weatherReader.weatherDesc)
                                     weatherReader.dataLoaded = true
                                 } catch(e) { console.log("ERROR: " + e) }
                             }
@@ -376,7 +367,7 @@ ShellRoot {
                                 }
                             }
                             Text {
-                                text: "5-DAY FORECAST"
+                                text: "4-DAY FORECAST"
                                 Layout.topMargin: 8
                                 Layout.bottomMargin: 4
                                 font.weight: 800
@@ -390,7 +381,7 @@ ShellRoot {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 100
                                 Repeater {
-                                    model: 5
+                                    model: 4
                                     Rectangle {
                                         Layout.fillWidth: true
                                         height: 100
@@ -572,10 +563,8 @@ ShellRoot {
                             hoverEnabled: true
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: (mouse) => {
-                                console.log("--- Tray Item Debug ---")
                                 console.log("ID:    ", modelData.id)
                                 console.log("Title: ", modelData.title)
-                                console.log("-----------------------")      
                                 if ( mouse.button === Qt.LeftButton ) {
                                     modelData.activate();
                                 }
