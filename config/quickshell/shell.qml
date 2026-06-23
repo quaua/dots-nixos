@@ -367,7 +367,7 @@ ShellRoot {
                                 }
                             }
                             Text {
-                                text: "4-DAY FORECAST"
+                                text: "5-DAY FORECAST"
                                 Layout.topMargin: 8
                                 Layout.bottomMargin: 4
                                 font.weight: 800
@@ -381,7 +381,7 @@ ShellRoot {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 100
                                 Repeater {
-                                    model: 4
+                                    model: 5
                                     Rectangle {
                                         Layout.fillWidth: true
                                         height: 100

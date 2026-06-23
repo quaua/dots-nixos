@@ -1,6 +1,6 @@
 import requests
 
-API_key = 'your_API'
+API_key = ''
 city_name = 'Almaty'
 country_code = 'KZ'
 
