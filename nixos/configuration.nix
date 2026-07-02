@@ -36,11 +36,17 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-  environment.systemPackages = with pkgs; [
-    
+  environment.systemPackages = with pkgs; [ 
     (python3.withPackages (p: with p; [ 
         requests
     ]))
+
+    (vscode-with-extensions.override {
+      vscode = vscodium;
+      vscodeExtensions = with vscode-extensions; [
+        ms-python.python
+      ];
+    })
 
     inputs.matugen.packages.x86_64-linux.default
     inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
@@ -48,10 +54,8 @@
     neovim
     git
     kitty
-    firefox
     vesktop
     swaynotificationcenter
-    nwg-look
     quickshell
     rofi
     yazi
@@ -72,7 +76,6 @@
     slurp
     satty
     vlc
-    obs-studio
     fdupes
     findimagedupes
     mediainfo
@@ -94,6 +97,7 @@
     shotcut
     libfaketime
     starship
+    vscodium
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono

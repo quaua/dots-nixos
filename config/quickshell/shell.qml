@@ -26,7 +26,7 @@ ShellRoot {
         }
 
         WlrLayershell.namespace: "bar"
-        WlrLayershell.layer: WlrLayershell.Bottom
+        WlrLayershell.layer: WlrLayershell.Top
         implicitHeight: Appearance.barHeight 
         color: "transparent"
 
@@ -159,7 +159,7 @@ ShellRoot {
                                 font.weight: 1000
                                 font.pixelSize: 22
                                 font.family: Globals.fontFamily
-                                color: "white"
+                                color: Colors.md3.on_surface
                             }
 
                             DayOfWeekRow {
@@ -213,7 +213,7 @@ ShellRoot {
                                     Text {
                                         anchors.centerIn: parent
                                         text: model.day
-                                        color: isThisMonth ? (isToday ? Colors.md3.on_primary : "white") : Colors.md3.on_surface
+                                        color: isThisMonth ? (isToday ? Colors.md3.on_primary : Colors.md3.on_surface) : Colors.md3.on_surface
                                         font.pixelSize: 14
                                         font.family: Globals.fontFamily
                                         font.weight: isToday ? 1000 : 600
@@ -224,7 +224,6 @@ ShellRoot {
                         }
                     }
 
-                    //------------------------------------------
                     Process {
                         property int weatherTemp: 0
                         property int weatherFeelsLike: 0
@@ -254,6 +253,23 @@ ShellRoot {
                         }
                     }
 
+                    Process {
+                        property var forecastData: []
+
+                        id: forecast5days
+                        running: false
+                        command: ["bash", "-c", "python $HOME/DESKTOPdir/pythonScripts/5dayforecast.py"]
+
+                        stdout: StdioCollector {
+                            onStreamFinished: {
+                                try {
+                                    let data = JSON.parse(this.text)
+                                    forecast5days.forecastData = data
+                                } catch(e) { console.log("ERROR: " + e) }
+                            }
+                        }
+                    }
+
                     Timer {
                         interval: 600000
                         running: true
@@ -261,10 +277,9 @@ ShellRoot {
                         triggeredOnStart: true
                         onTriggered: {
                             weatherReader.running = true
+                            forecast5days.running = true
                         }
                     }
-                    //------------------------------------------
-
 
                     Rectangle {
                         id: weather
@@ -381,14 +396,54 @@ ShellRoot {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 100
                                 Repeater {
-                                    model: 5
-                                    Rectangle {
+                                    model: forecast5days.forecastData
+                                    delegate: Rectangle {
                                         Layout.fillWidth: true
                                         height: 100
                                         color: Qt.alpha(Colors.md3.primary, 0.05)
                                         border.width: 1
                                         border.color: Qt.alpha(Colors.md3.primary, 0.08)
                                         radius: 8
+
+                                        ColumnLayout {
+                                            spacing: 10
+                                            anchors.fill: parent
+
+                                            Text {
+                                                Layout.alignment: Qt.AlignHCenter
+                                                Layout.bottomMargin: -6
+                                                text: modelData.day_of_week
+                                                font.family: Globals.fontFamily
+                                                font.letterSpacing: 1.5
+                                                color: Qt.alpha(Colors.md3.on_surface, 0.35)
+                                                font.pixelSize: 13
+                                                font.weight: 1000
+                                            }
+                                            Image {
+                                                id: iconWeather
+                                                Layout.alignment: Qt.AlignHCenter
+                                                Layout.bottomMargin: -20
+                                                Layout.topMargin: -20
+                                                source: "/home/jaga/DESKTOPdir/weatherIcons/" + modelData.icon
+                                            }
+                                            Text {
+                                                Layout.alignment: Qt.AlignHCenter
+                                                Layout.bottomMargin: -18
+                                                text: modelData.max + "°"
+                                                font.family: Globals.fontFamily
+                                                color: Colors.md3.on_surface
+                                                font.pixelSize: 16
+                                                font.weight: 1000
+                                            }
+                                            Text {
+                                                Layout.alignment: Qt.AlignHCenter
+                                                text: modelData.min + "°"
+                                                color: Qt.alpha(Colors.md3.on_surface , 0.3)
+                                                font.pixelSize: 12
+                                                font.family: Globals.fontFamily
+                                                font.weight: 800
+                                            }
+                                        }
                                     }
                                 }
                             }
