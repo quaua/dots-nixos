@@ -29,7 +29,7 @@ for item in data["list"]:
         pass
 
 for date in list(daily_temps.keys())[0:5]:
-    if statistics.mode(daily_cond[date]) == 800:
+    if statistics.mode(daily_cond[date]) == 800 or statistics.mode(daily_cond[date]) == 804:
         iconName = "clear.svg"
     elif statistics.mode(daily_cond[date]) == 500:
         iconName = "rain.svg"

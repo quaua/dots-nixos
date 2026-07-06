@@ -110,6 +110,12 @@ ShellRoot {
             color: "transparent"
             visible: false
 
+            onVisibleChanged: {
+                if (visible) {
+                    calendar.currentDate = new Date()
+                }
+            }
+
             Rectangle {
                 id: surfacecalweaPopup
                 anchors.fill: parent
@@ -127,6 +133,103 @@ ShellRoot {
                         Layout.margins: 32
                         Layout.rightMargin: 0
 
+                        RowLayout {
+                            id: navButtons
+                            anchors.right: parent.right
+                            anchors.top: parent.top
+                            anchors.topMargin: 25
+                            spacing: 8
+                            Rectangle {
+                                width: 30
+                                height: 30
+                                radius: 8
+                                color: msPrevButton.containsMouse ? Colors.md3.primary : Qt.alpha(Colors.md3.primary, 0.06)
+                                border.width: 1
+                                border.color: Qt.alpha(Colors.md3.primary, 0.1)
+
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: 200
+                                        easing.type: Easing.OutCubic 
+                                    }
+                                }
+
+                                MouseArea {
+                                    id: msPrevButton
+                                    hoverEnabled: true
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        calendar.currentDate = new Date(
+                                            calendar.currentDate.getFullYear(), 
+                                            calendar.currentDate.getMonth() - 1,
+                                            calendar.currentDate.getDate()
+                                        )
+                                    }
+
+                                    Text {
+                                        text: "<"
+                                        anchors.centerIn: parent
+                                        font.pixelSize: 16
+                                        font.weight: 500
+                                        font.family: Globals.fontFamily
+                                        color: msPrevButton.containsMouse ? Colors.md3.on_primary : Qt.alpha(Colors.md3.primary, 0.6)
+
+                                        Behavior on color {
+                                            ColorAnimation {
+                                                duration: 200
+                                                easing.type: Easing.OutCubic 
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Rectangle {
+                                width: 30
+                                height: 30
+                                radius: 8
+                                color: msNextButton.containsMouse ? Colors.md3.primary : Qt.alpha(Colors.md3.primary, 0.06)
+                                border.width: 1
+                                border.color: Qt.alpha(Colors.md3.primary, 0.1)
+
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: 200
+                                        easing.type: Easing.OutCubic 
+                                    }
+                                }
+
+                                MouseArea {
+                                    id: msNextButton
+                                    hoverEnabled: true
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        calendar.currentDate = new Date(
+                                            calendar.currentDate.getFullYear(), 
+                                            calendar.currentDate.getMonth() + 1,
+                                            calendar.currentDate.getDate()
+                                        )
+                                    }
+
+                                    Text {
+                                        text: ">"
+                                        anchors.centerIn: parent
+                                        font.pixelSize: 16
+                                        font.weight: 500
+                                        font.family: Globals.fontFamily
+                                        color: msNextButton.containsMouse ? Colors.md3.on_primary : Qt.alpha(Colors.md3.primary, 0.6)
+
+                                        Behavior on color {
+                                            ColorAnimation {
+                                                duration: 200
+                                                easing.type: Easing.OutCubic 
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         Text {
                             text: "CALENDAR"
                             font.pixelSize: 14
@@ -136,7 +239,6 @@ ShellRoot {
                             color: Qt.alpha(Colors.md3.primary, 0.5)
                         }
 
-                        //----
                         property date currentDate: new Date()
 
                         Timer {
@@ -145,7 +247,12 @@ ShellRoot {
                             repeat: true
                             triggeredOnStart: true
                             onTriggered: {
-                                calendar.currentDate = new Date()
+                                var now = new Date()
+                                if (calendar.currentDate.getFullYear() === now.getFullYear() &&
+                                calendar.currentDate.getMonth() === now.getMonth() &&
+                                calendar.currentDate.getDate() === now.getDate()) {
+                                    calendar.currentDate = now
+                                }
                             }
                         }
 
@@ -190,16 +297,15 @@ ShellRoot {
                                 delegate: Item {
                                     id: delegateMonth
                                     required property var model
+                                    property date now: new Date()
 
                                     property bool isToday:
-                                    model.day === calendar.currentDate.getDate() &&
-                                    model.month === calendar.currentDate.getMonth() &&
-                                    model.year === calendar.currentDate.getFullYear()
+                                    model.day === now.getDate() &&
+                                    model.month === now.getMonth() &&
+                                    model.year === now.getFullYear()
 
                                     property bool isThisMonth:
                                     model.month === calendar.currentDate.getMonth() &&
-                                    model.year === calendar.currentDate.getFullYear()
-                                    property bool isThisYear:
                                     model.year === calendar.currentDate.getFullYear()
 
                                     Rectangle {
@@ -288,7 +394,6 @@ ShellRoot {
                         Layout.fillHeight: true
                         Layout.margins: 32
                         Layout.leftMargin: 0
-                        //border.width: 1 //delete
 
                         ColumnLayout {
                             anchors.fill: parent
@@ -318,6 +423,7 @@ ShellRoot {
                                     text: "°C"
                                     Layout.topMargin: 2
                                     Layout.bottomMargin: 32
+                                    Layout.leftMargin: 4
                                     font.weight: 1000
                                     font.family: Globals.fontFamily
                                     font.pixelSize: 24

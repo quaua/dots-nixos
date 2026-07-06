@@ -98,6 +98,7 @@
     libfaketime
     starship
     vscodium
+    unrar-free
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -178,7 +179,6 @@
           "https://mirror.sjtu.edu.cn/nix-channels/store"
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://cache.nixos.org"
-          "https://nix-community.cachix.org"
           ];
           http-connections = 128;
           max-substitution-jobs = 128;
