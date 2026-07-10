@@ -12,9 +12,9 @@ Browser - Zen
 
 Clone repository in home directory then rename directory to "nixos-config".  
 Then in nixos-config directory run this command ```./install.sh```.  
-Keep in mind that this bash script is intented for first installation and for rebuilding whole configuration, also do not delete this directory because symlinks are dependant on this directory.
+Keep in mind that this bash script is intented for first time installation and for rebuilding whole configuration, also do not delete this directory because symlinks are dependant on this directory.
 
-To make weather forecast work, you have to visit openweather website and there get API key, after that go to pythonScripts directory and paste API key.
+To make weather forecast work, you have to visit openweather website and get there API key, after that go to pythonScripts directory and paste API key.
 
 ## Known issues
 
@@ -23,7 +23,7 @@ Matugen spotify and GTK doesnt work
 Suspend doesnt work  
 It has frame drops when switching between workspaces, probably just switch to niri. Too lazy to fix it  
 Install bash script may break on fresh install  
-Calendar doesnt update days in real time... probably   
+When calendar updates to a next month and when you watching prev/next month from current one, month you currently watching can change without pressing any buttons.
 
 ## TODO
 
@@ -43,6 +43,6 @@ Add volume binds
 Style swaync and add notification center and add notification sound  
 Make automatic timezones and location change for system, if its possible on nixos  
 Make weather city change simple way without coding python files  
-Add animations for calendar popup and make animation for months switcher if its possible  
 Change paths in whole configuration, to avoid using nixos-config  
-Change icons in 5day forecast
+Change icons in 5day forecast  
+Split shell.qml to different ones. workspaces.qml , time.qml , calendar.qml etc.

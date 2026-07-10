@@ -1,15 +1,14 @@
 //@ pragma UseQApplication
 
 import Quickshell
-import Quickshell.Services.Mpris
 import Quickshell.Hyprland
 import Quickshell.Io
 import QtQuick
 import QtQml.Models
 import Quickshell.Services.SystemTray
 import Quickshell.Wayland
-import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls
 
 ShellRoot {
     PanelWindow {
@@ -35,8 +34,6 @@ ShellRoot {
             anchors.fill: parent
             color: Colors.md3.background
             opacity: 0.6
-            border.width: 0
-            radius: 0
         }
 
         // Workspaces
@@ -71,7 +68,6 @@ ShellRoot {
                         Rectangle {
                             width: 25
                             height: 25
-                            radius: width/2
                             color: ws ? Qt.rgba(1 , 1 , 1 , 0.1) : "transparent"
                             anchors.centerIn: parent
 
@@ -84,7 +80,6 @@ ShellRoot {
                                     Hyprland.dispatch(`workspace ${target}`);
                                 } 
                             }
-
 
                             topLeftRadius: prevOccupied ? 0 : height/2
                             bottomLeftRadius: prevOccupied ? 0 : height/2
@@ -112,7 +107,8 @@ ShellRoot {
 
             onVisibleChanged: {
                 if (visible) {
-                    calendar.currentDate = new Date()
+                    calendar.monthOffset = 0
+                    calendar.updateCalendarGrid();
                 }
             }
 
@@ -126,6 +122,10 @@ ShellRoot {
                     anchors.fill: parent
                     spacing: 16
                     Rectangle {
+                        property var currentTime: new Date()
+                        property int monthOffset: 0
+                        property string targetMonthName: ""
+
                         id: calendar
                         color: "transparent"
                         Layout.fillWidth: true
@@ -139,90 +139,48 @@ ShellRoot {
                             anchors.top: parent.top
                             anchors.topMargin: 25
                             spacing: 8
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                radius: 8
-                                color: msPrevButton.containsMouse ? Colors.md3.primary : Qt.alpha(Colors.md3.primary, 0.06)
-                                border.width: 1
-                                border.color: Qt.alpha(Colors.md3.primary, 0.1)
+                            Repeater {
+                                model: [
+                                    { label: "<", value: -1 },
+                                    { label: ">", value: 1 },
+                                ]
+                                Rectangle {
+                                    width: 30
+                                    height: 30
+                                    radius: 8
+                                    color: msButton.containsMouse ? Colors.md3.primary : Qt.alpha(Colors.md3.primary, 0.06)
+                                    border.width: 1
+                                    border.color: Qt.alpha(Colors.md3.primary, 0.1)
 
-                                Behavior on color {
-                                    ColorAnimation {
-                                        duration: 200
-                                        easing.type: Easing.OutCubic 
-                                    }
-                                }
-
-                                MouseArea {
-                                    id: msPrevButton
-                                    hoverEnabled: true
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        calendar.currentDate = new Date(
-                                            calendar.currentDate.getFullYear(), 
-                                            calendar.currentDate.getMonth() - 1,
-                                            calendar.currentDate.getDate()
-                                        )
-                                    }
-
-                                    Text {
-                                        text: "<"
-                                        anchors.centerIn: parent
-                                        font.pixelSize: 16
-                                        font.weight: 500
-                                        font.family: Globals.fontFamily
-                                        color: msPrevButton.containsMouse ? Colors.md3.on_primary : Qt.alpha(Colors.md3.primary, 0.6)
-
-                                        Behavior on color {
-                                            ColorAnimation {
-                                                duration: 200
-                                                easing.type: Easing.OutCubic 
-                                            }
+                                    Behavior on color {
+                                        ColorAnimation {
+                                            duration: 200
+                                            easing.type: Easing.OutCubic 
                                         }
                                     }
-                                }
-                            }
 
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                radius: 8
-                                color: msNextButton.containsMouse ? Colors.md3.primary : Qt.alpha(Colors.md3.primary, 0.06)
-                                border.width: 1
-                                border.color: Qt.alpha(Colors.md3.primary, 0.1)
+                                    MouseArea {
+                                        id: msButton
+                                        hoverEnabled: true
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            calendar.monthOffset += modelData.value
+                                            calendar.updateCalendarGrid();
+                                        }
 
-                                Behavior on color {
-                                    ColorAnimation {
-                                        duration: 200
-                                        easing.type: Easing.OutCubic 
-                                    }
-                                }
+                                        Text {
+                                            text: modelData.label
+                                            anchors.centerIn: parent
+                                            font.pixelSize: 16
+                                            font.weight: 500
+                                            font.family: Globals.fontFamily
+                                            color: msButton.containsMouse ? Colors.md3.on_primary : Qt.alpha(Colors.md3.primary, 0.6)
 
-                                MouseArea {
-                                    id: msNextButton
-                                    hoverEnabled: true
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        calendar.currentDate = new Date(
-                                            calendar.currentDate.getFullYear(), 
-                                            calendar.currentDate.getMonth() + 1,
-                                            calendar.currentDate.getDate()
-                                        )
-                                    }
-
-                                    Text {
-                                        text: ">"
-                                        anchors.centerIn: parent
-                                        font.pixelSize: 16
-                                        font.weight: 500
-                                        font.family: Globals.fontFamily
-                                        color: msNextButton.containsMouse ? Colors.md3.on_primary : Qt.alpha(Colors.md3.primary, 0.6)
-
-                                        Behavior on color {
-                                            ColorAnimation {
-                                                duration: 200
-                                                easing.type: Easing.OutCubic 
+                                            Behavior on color {
+                                                ColorAnimation {
+                                                    duration: 200
+                                                    easing.type: Easing.OutCubic 
+                                                }
                                             }
                                         }
                                     }
@@ -239,19 +197,50 @@ ShellRoot {
                             color: Qt.alpha(Colors.md3.primary, 0.5)
                         }
 
-                        property date currentDate: new Date()
+                        Component.onCompleted: {
+                            calendar.updateCalendarGrid();
+                        }
+
+                        function updateCalendarGrid() {
+                            let d = new Date(); //current time
+                            d.setDate(1); // set day as 1st day for d variable
+                            d.setMonth(d.getMonth() + calendar.monthOffset); // set month with offset for d variable
+
+                            let targetMonth = d.getMonth();
+                            let targetYear = d.getFullYear();
+
+                            let actualToday = new Date();
+                            let isRealCurrentMonth = (actualToday.getMonth() === targetMonth && actualToday.getFullYear() === targetYear);
+                            let todayDate = actualToday.getDate();
+
+                            calendar.targetMonthName = Qt.formatDateTime(d, "MMMM yyyy");
+
+                            let firstDay = new Date(targetYear, targetMonth, 1).getDay();
+                            firstDay = (firstDay === 0) ? 6 : firstDay - 1; 
+
+                            let daysInMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+                            let daysInPrevMonth = new Date(targetYear, targetMonth, 0).getDate();
+
+                            calendarModel.clear();
+
+                            for (let i = firstDay - 1; i >= 0; i--) {
+                                calendarModel.append({ dayNum: (daysInPrevMonth - i).toString(), isCurrentMonth: false, isToday: false });
+                            }
+                            for (let i = 1; i <= daysInMonth; i++) {
+                                calendarModel.append({ dayNum: i.toString(), isCurrentMonth: true, isToday: (isRealCurrentMonth && i === todayDate) });
+                            }
+                            let remaining = 42 - calendarModel.count;
+                            for (let i = 1; i <= remaining; i++) {
+                                calendarModel.append({ dayNum: i.toString(), isCurrentMonth: false, isToday: false });
+                            }
+                        }
 
                         Timer {
-                            interval: 1000 //change to 1 minute interval
-                            running: true
-                            repeat: true
-                            triggeredOnStart: true
+                            interval: 1000; running: true; repeat: true; triggeredOnStart: true
                             onTriggered: {
-                                var now = new Date()
-                                if (calendar.currentDate.getFullYear() === now.getFullYear() &&
-                                calendar.currentDate.getMonth() === now.getMonth() &&
-                                calendar.currentDate.getDate() === now.getDate()) {
-                                    calendar.currentDate = now
+                                calendar.currentTime = new Date();
+                                if (calendar.currentTime.getHours() === 0 && calendar.currentTime.getMinutes() === 0 && calendar.currentTime.getSeconds() === 0) {
+                                    calendar.updateCalendarGrid();
                                 }
                             }
                         }
@@ -260,70 +249,54 @@ ShellRoot {
                             anchors.fill: parent
                             anchors.topMargin: 32
 
-                            // Month and Year Header
                             Text {
-                                text: Qt.formatDate(calendar.currentDate, "MMMM yyyy")
+                                text: calendar.targetMonthName
                                 font.weight: 1000
                                 font.pixelSize: 22
                                 font.family: Globals.fontFamily
                                 color: Colors.md3.on_surface
                             }
 
-                            DayOfWeekRow {
-                                locale: Qt.locale("en_GB")
+                            RowLayout {
                                 Layout.fillWidth: true
-                                Layout.bottomMargin: 4
-                                Layout.topMargin: 4
-
-                                delegate: Text {
-                                    text: model.longName.substring(0, 2)
-                                    color: Qt.alpha(Colors.md3.primary, 0.5)
-                                    font.pixelSize: 14
-                                    font.family: Globals.fontFamily
-                                    font.weight: 700
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
+                                Layout.bottomMargin: 8
+                                Layout.topMargin: 8
+                                Repeater {
+                                    model: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+                                    Text {
+                                        Layout.fillWidth: true
+                                        text: modelData
+                                        color: Qt.alpha(Colors.md3.primary, 0.5)
+                                        font.pixelSize: 14
+                                        font.family: Globals.fontFamily
+                                        font.weight: 700
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
                                 }
                             }
 
-                            MonthGrid {
-                                id: monthGrid
-                                month: calendar.currentDate.getMonth()
-                                year: calendar.currentDate.getFullYear()
-                                locale: Qt.locale("en_GB")
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-
-                                delegate: Item {
-                                    id: delegateMonth
-                                    required property var model
-                                    property date now: new Date()
-
-                                    property bool isToday:
-                                    model.day === now.getDate() &&
-                                    model.month === now.getMonth() &&
-                                    model.year === now.getFullYear()
-
-                                    property bool isThisMonth:
-                                    model.month === calendar.currentDate.getMonth() &&
-                                    model.year === calendar.currentDate.getFullYear()
-
+                            ListModel { id: calendarModel }
+                            GridLayout {
+                                columns: 7
+                                rowSpacing: 8
+                                columnSpacing: 4
+                                Repeater {
+                                    model: calendarModel
                                     Rectangle {
-                                        anchors.centerIn: parent
-                                        width: 40
-                                        height: 30
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        color: model.isToday ? Colors.md3.primary : "transparent"
                                         radius: 8
-                                        color: isToday ? Colors.md3.primary : "transparent"
-                                    }
-
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: model.day
-                                        color: isThisMonth ? (isToday ? Colors.md3.on_primary : Colors.md3.on_surface) : Colors.md3.on_surface
-                                        font.pixelSize: 14
-                                        font.family: Globals.fontFamily
-                                        font.weight: isToday ? 1000 : 600
-                                        opacity: isThisMonth ? 1.0 : 0.2
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: model.dayNum 
+                                            font.family: Globals.fontFamily
+                                            font.weight: model.isToday ? 1000 : 600
+                                            opacity: model.isCurrentMonth ? 1.0 : 0.2
+                                            font.pixelSize: 14
+                                            color: model.isCurrentMonth ? (model.isToday ? Colors.md3.on_primary : Colors.md3.on_surface) : Colors.md3.on_surface
+                                        }
                                     }
                                 }
                             }
