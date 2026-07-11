@@ -102,6 +102,7 @@
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
+    material-symbols
   ];
 
   system.stateVersion = "25.11"; #DONT

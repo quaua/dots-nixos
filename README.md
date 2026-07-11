@@ -44,5 +44,4 @@ Style swaync and add notification center and add notification sound
 Make automatic timezones and location change for system, if its possible on nixos  
 Make weather city change simple way without coding python files  
 Change paths in whole configuration, to avoid using nixos-config  
-Change icons in 5day forecast  
 Split shell.qml to different ones. workspaces.qml , time.qml , calendar.qml etc.

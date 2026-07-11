@@ -29,10 +29,16 @@ for item in data["list"]:
         pass
 
 for date in list(daily_temps.keys())[0:5]:
-    if statistics.mode(daily_cond[date]) == 800 or statistics.mode(daily_cond[date]) == 804:
-        iconName = "clear.svg"
-    elif statistics.mode(daily_cond[date]) == 500:
-        iconName = "rain.svg"
+    if statistics.mode(daily_cond[date]) == 800: # Sun
+        iconName = "\ue81a" # sun icon
+    elif statistics.mode(daily_cond[date]) == 500: # Light rain
+        iconName = "\uf61e" # rainy light icon
+    elif statistics.mode(daily_cond[date]) == 501: # Moderate rain
+        iconName = "\uf176" # rainy icon
+    elif statistics.mode(daily_cond[date]) == 502 or statistics.mode(daily_cond[date]) == 503 or statistics.mode(daily_cond[date]) == 504: # heavy intensity and very heavy and extreme rains
+        iconName = "\uf61f" # rainy heavy icon
+    elif statistics.mode(daily_cond[date]) == 801 or statistics.mode(daily_cond[date]) == 802 or statistics.mode(daily_cond[date]) == 803 or statistics.mode(daily_cond[date]) == 804: # Clouds
+        iconName = "\ue2bd" # cloud icon
     else:
         iconName = statistics.mode(daily_cond[date])
 

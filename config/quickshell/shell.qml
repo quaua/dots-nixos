@@ -498,12 +498,18 @@ ShellRoot {
                                                 font.pixelSize: 13
                                                 font.weight: 1000
                                             }
-                                            Image {
+                                            Text {
                                                 id: iconWeather
                                                 Layout.alignment: Qt.AlignHCenter
                                                 Layout.bottomMargin: -20
                                                 Layout.topMargin: -20
-                                                source: "/home/jaga/DESKTOPdir/weatherIcons/" + modelData.icon
+                                                text: modelData.icon
+                                                font.family: "Material Symbols Rounded"
+                                                font.pixelSize: 22
+                                                font.weight: 600
+                                                color: Qt.alpha(Colors.md3.primary, 0.5)
+
+
                                             }
                                             Text {
                                                 Layout.alignment: Qt.AlignHCenter
