@@ -505,7 +505,7 @@ ShellRoot {
                                                 Layout.topMargin: -20
                                                 text: modelData.icon
                                                 font.family: "Material Symbols Rounded"
-                                                font.pixelSize: 22
+                                                font.pixelSize: 18
                                                 font.weight: 600
                                                 color: Qt.alpha(Colors.md3.primary, 0.5)
 
