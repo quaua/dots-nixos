@@ -14,9 +14,6 @@ in
   
   programs.bash = {
     enable = true;
-    shellAliases = {
-      jaga = "echo HI JAGA!";     
-    };
     bashrcExtra = ''
       function y() {
         local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -27,7 +24,12 @@ in
       }
 
       export EDITOR=nvim
+
+      setweather() {
+        python ~/dots-nixos/pythonScripts/place.py "$1" "$2"
+      }
     '';
+
     profileExtra = ''
       if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
         exec start-hyprland
@@ -43,20 +45,7 @@ in
 
   programs.yazi = {
     enable = true;
-    keymap = {
-      mgr.prepend_keymap = [
-        {
-	  on = [ "<C-n>" ];
-	  run = "shell -- xdragon -a -x -i -T \"$@\"";
-	}
-	{
-          on = "!";
-          "for" = "unix";
-          run = "shell \"$SHELL\" --block";
-          desc = "Open $SHELL here";
-        }
-      ];
-    };
+    shellWrapperName = "y";
     plugins = {
       full-border = pkgs.yaziPlugins.full-border;
       mediainfo = pkgs.yaziPlugins.mediainfo;
@@ -65,6 +54,8 @@ in
 
   programs.neovim = {
     enable = true;
+    withPython3 = false;
+    withRuby = false;
     initLua = ''
       vim.opt.number = true
       vim.opt.relativenumber = true
@@ -252,16 +243,9 @@ in
     ];
   };
 
-  xdg.configFile."yazi/yazi.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/yaziconf/yazi.toml";
-  xdg.configFile."yazi/init.lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/yaziconf/init.lua";
-  xdg.configFile."matugen/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/config.toml";
-  xdg.configFile."matugen/templates/kitty-colors.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/kitty-colors.conf";
-  xdg.configFile."matugen/templates/yazi-colors.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/yazi-colors.toml";
-  xdg.configFile."matugen/templates/spicetify-colors.ini".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/spicetify-colors.ini";
-  xdg.configFile."matugen/templates/vesktop-colors.css".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/vesktop-colors.css";
-  xdg.configFile."matugen/templates/rofi-colors.rasi".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/rofi-colors.rasi";
-  xdg.configFile."matugen/templates/hyprland-colors.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/hyprland-colors.conf";
-  xdg.configFile."matugen/templates/nvim-colors.vim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/nvim-colors.vim";
-  xdg.configFile."matugen/templates/gtk-colors.css".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/gtk-colors.css";
-  xdg.configFile."matugen/templates/telegram-colors".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/matugenconf/templates/telegram-colors";
+  xdg.configFile."yazi/init.lua".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/yaziconf/init.lua";
+  xdg.configFile."yazi/yazi.toml".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/yaziconf/yazi.toml";
+  xdg.configFile."matugen".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/matugenconf";
+  xdg.configFile."hypr".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/config/hypr";
+  xdg.configFile."quickshell".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/config/quickshell";
 }

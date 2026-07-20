@@ -105,7 +105,7 @@
     material-symbols
   ];
 
-  system.stateVersion = "25.11"; #DONT
+  system.stateVersion = "25.11"; # do not
   #
   # NVIDIA
   #

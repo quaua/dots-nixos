@@ -314,7 +314,7 @@ ShellRoot {
 
                         id: weatherReader
                         running: false
-                        command: ["bash", "-c", "python $HOME/DESKTOPdir/pythonScripts/weather.py"]
+                        command: ["bash", "-c", "python /etc/nixos/dots-nixos/pythonScripts/weather.py"]
 
                         stdout: StdioCollector {
                             onStreamFinished: {
@@ -337,7 +337,7 @@ ShellRoot {
 
                         id: forecast5days
                         running: false
-                        command: ["bash", "-c", "python $HOME/DESKTOPdir/pythonScripts/5dayforecast.py"]
+                        command: ["bash", "-c", "python /etc/nixos/dots-nixos/pythonScripts/5dayforecast.py"]
 
                         stdout: StdioCollector {
                             onStreamFinished: {
@@ -355,6 +355,15 @@ ShellRoot {
                         repeat: true
                         triggeredOnStart: true
                         onTriggered: {
+                            weatherReader.running = true
+                            forecast5days.running = true
+                        }
+                    }
+
+                    FileView {
+                        path: Quickshell.env("HOME") + "/.cache/weatherData/place.json"
+                        watchChanges: true
+                        onFileChanged: {
                             weatherReader.running = true
                             forecast5days.running = true
                         }
@@ -595,7 +604,7 @@ ShellRoot {
             property string layoutName: "??"
             property string layoutShort: layoutName.substring(0, 2).toUpperCase()
 
-            width: lang.width + 16
+            width: lang.width + 36
             height: Appearance.barHeight - 8
             radius: height/2 - 4
             anchors.right: trayBox.left
@@ -654,13 +663,26 @@ ShellRoot {
             }
 
             Text {
+                text: "\uf028"
+                font.pixelSize: 14
+                font.family: "Material Symbols Rounded"
+                font.weight: 600
+                color: "white"
+                anchors.leftMargin: 8
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Text {
                 id: lang
                 text: langBox.layoutShort
                 font.pixelSize: 16
                 font.family: Globals.fontFamily
                 font.weight: 800
                 color: "white"
-                anchors.centerIn: parent
+                anchors.rightMargin: 8
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 

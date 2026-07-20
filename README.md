@@ -10,11 +10,9 @@ Browser - Zen
 
 ## Installation
 
-Clone repository in home directory then rename directory to "nixos-config".  
-Then in nixos-config directory run this command ```./install.sh```.  
-Keep in mind that this bash script is intented for first time installation and for rebuilding whole configuration, also do not delete this directory because symlinks are dependant on this directory.
-
-To make weather forecast work, you have to visit openweather website and get there API key, after that go to pythonScripts directory and paste API key.
+Clone repository then run this command ```./install.sh```.  
+Keep in mind that this bash script is intented for first time installation and for rebuilding whole configuration.  
+To make weather forecast work, you have to visit openweather website and get there API key, after that go to pythonScripts directory and paste API key. After you can run this command to specify which city to fetch. ```setweather cityName countryCode```  
 
 ## Known issues
 
@@ -42,6 +40,4 @@ Add volume control quickshell bar
 Add volume binds  
 Style swaync and add notification center and add notification sound  
 Make automatic timezones and location change for system, if its possible on nixos  
-Make weather city change simple way without coding python files  
-Change paths in whole configuration, to avoid using nixos-config  
 Split shell.qml to different ones. workspaces.qml , time.qml , calendar.qml etc.

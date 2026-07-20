@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
+shopt -s extglob
 
-sudo rm -rf /etc/nixos/configuration.nix /etc/nixos/flake.nix /etc/nixos/home.nix && sudo cp -r ./nixos/* /etc/nixos/ && sudo nixos-rebuild switch --flake /etc/nixos#reaper
-cp -r ./config/* ~/.config/
+sudo rm -rf /etc/nixos/!(hardware-configuration.nix)
+sudo cp ./nixos/* /etc/nixos/
+sudo rsync -a --exclude=".*" --exclude="nixos" --exclude="install.sh" --exclude="README.md" ../dots-nixos /etc/nixos/
 
-awww img ~/nixos-config/wallpapers/ign_colorful.png
+sudo nixos-rebuild switch --flake /etc/nixos#reaper
+
+awww img /etc/nixos/dots-nixos/wallpapers/ign_colorful.png
 matugen color hex "#be616a"
 hyprctl reload

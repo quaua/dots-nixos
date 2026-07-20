@@ -22,7 +22,7 @@ output_path = '~/.config/rofi/colors.rasi'
 
 [templates.hyprland]
 input_path = './templates/hyprland-colors.conf'
-output_path = '~/.config/hypr/colors.conf'
+output_path = '/etc/nixos/dots-nixos/config/hypr/colors.conf'
 post_hook = 'hyprctl reload'
 
 [templates.nvim]
