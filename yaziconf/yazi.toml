@@ -56,6 +56,3 @@
 
 [mgr]
 show_hidden = true
-[[mgr.prepend_keymap]]
-on = ["<C-n>"]
-run = "shell -- xdragon -a -x -i -T \"$@\""
