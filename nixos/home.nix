@@ -5,7 +5,6 @@ in
 
 {
   imports = [
-    inputs.spicetify-nix.homeManagerModules.default
   ];
 
   home.username = "jaga";
@@ -37,15 +36,17 @@ in
     '';
   };
 
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      color-scheme = "prefer-dark";
-    };
-  };
-
   programs.yazi = {
     enable = true;
     shellWrapperName = "y";
+    keymap = {
+      mgr.prepend_keymap = [
+        {
+	      on = [ "<C-n>" ];
+	      run = "shell -- xdragon -a -x -i -T \"$@\"";
+	    }
+      ];
+    };
     plugins = {
       full-border = pkgs.yaziPlugins.full-border;
       mediainfo = pkgs.yaziPlugins.mediainfo;
@@ -141,6 +142,12 @@ in
     iconTheme.package = pkgs.morewaita-icon-theme;
   };
 
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
+
   programs.rofi = {
     enable = true;
 
@@ -230,17 +237,6 @@ in
     enable = true;
     enableZshIntegration = true;
     
-  };
-
-  programs.spicetify =
-  let
-    spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-  in
-  {
-    enable = true;
-    enabledExtensions = with spicePkgs.extensions; [
-      adblock
-    ];
   };
 
   xdg.configFile."yazi/init.lua".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/yaziconf/init.lua";

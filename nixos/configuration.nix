@@ -4,6 +4,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      inputs.spicetify-nix.nixosModules.default
     ];
 
   # Bootloader.
@@ -32,7 +33,7 @@
   users.users.jaga = {
     isNormalUser = true;
     description = "jaga";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -62,6 +63,7 @@
     pavucontrol
     steam
     unzip
+    p7zip
     ffmpeg-full
     telegram-desktop
     python3
@@ -81,7 +83,6 @@
     mediainfo
     imagemagick
     exiftool
-    spicetify-cli
     home-manager
     wineWow64Packages.stable
     winetricks
@@ -99,6 +100,16 @@
     starship
     vscodium
     unrar-free
+    spotify
+    virt-manager
+    virt-viewer
+    spice 
+    spice-gtk
+    spice-protocol
+    virtio-win
+    win-spice
+    pkgs.adwaita-icon-theme
+    file
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -185,5 +196,41 @@
           max-substitution-jobs = 128;
           max-jobs = "auto";
       };
+  };
+  #
+  # SPICETIFY
+  #
+  programs.spicetify =
+  let
+    spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  in
+  {
+    enable = true;
+    enabledExtensions = with spicePkgs.extensions; [
+      adblock
+      hidePodcasts
+      shuffle
+    ];
+  };
+  #
+  # VM
+  #
+  programs.dconf.enable = true;
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+      qemu = {
+        swtpm.enable = true;
+      };
+    };
+    spiceUSBRedirection.enable = true;
+  };
+  services.spice-vdagentd.enable = true;
+  #
+  # FIREWALL
+  #
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 8080 ];
   };
 }

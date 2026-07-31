@@ -405,7 +405,7 @@ ShellRoot {
                                     text: "°C"
                                     Layout.topMargin: 2
                                     Layout.bottomMargin: 32
-                                    Layout.leftMargin: 4
+                                    Layout.leftMargin: 2
                                     font.weight: 1000
                                     font.family: Globals.fontFamily
                                     font.pixelSize: 24
