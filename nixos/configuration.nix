@@ -4,6 +4,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./ssh.nix
       inputs.spicetify-nix.nixosModules.default
     ];
 
@@ -231,6 +232,6 @@
   #
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 8080 ];
+    allowedTCPPorts = [ 8080 2222 ];
   };
 }
