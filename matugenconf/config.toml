@@ -16,11 +16,6 @@ output_path = '~/.config/vesktop/themes/midnight-discord.css'
 input_path = './templates/rofi-colors.rasi'
 output_path = '~/.config/rofi/colors.rasi'
 
-[templates.hyprland]
-input_path = './templates/hyprland-colors.conf'
-output_path = '/etc/nixos/dots-nixos/config/hypr/colors.conf'
-post_hook = 'hyprctl reload'
-
 [templates.nvim]
 input_path = './templates/nvim-colors.vim'
 output_path = '~/.config/nvim/colors/matugen.vim'

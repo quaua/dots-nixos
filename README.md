@@ -1,6 +1,6 @@
 # nixos-config
 
-My NixOS + Hyprland dots
+My NixOS + Niri dots
 
 Bar - Quickshell  
 File Manager - Yazi  
@@ -19,7 +19,7 @@ To make weather forecast work, you have to visit openweather website and get the
 mkOutOfStoreSymlink doesnt work, IT SEEMS TO WORK??? BUT STILL SHOWS SYMLINK TO NIX/STORE FOR SOME REASON  
 Matugen spotify and GTK doesnt work  
 Suspend doesnt work  
-It has frame drops when switching between workspaces, probably just switch to niri. Too lazy to fix it  
+It has frame drops when switching between workspaces, didnt find solution maybe NVIDIA is just shit.  
 Install bash script may break on fresh install  
 When calendar updates to a next month and when you watching prev/next month from current one, month you currently watching can change without pressing any buttons.
 
@@ -28,7 +28,6 @@ When calendar updates to a next month and when you watching prev/next month from
 Add power menu in quickshell  
 Rice lock screen  
 Rice context menu in tray  
-Clean up some stuff related to screenshot system  
 Make yazi open as file chooser menu, if its possible  
 Customize fastfetch  
 Make live wallpaper switcher  
@@ -37,7 +36,9 @@ Change terminal prompt via starship
 Tweak colors for yazi, neovim on matugen  
 Make cursor auto apply at fresh install  
 Add volume control quickshell bar  
-Add volume binds  
 Style swaync and add notification center and add notification sound  
 Make automatic timezones and location change for system, if its possible on nixos  
-Split shell.qml to different ones. workspaces.qml , time.qml , calendar.qml etc.
+Split shell.qml to different ones. workspaces.qml , time.qml , calendar.qml etc.  
+Make current weather python to fetch icons.  
+Optimize API calls, make less calls per info.  
+Remake rofi colors.

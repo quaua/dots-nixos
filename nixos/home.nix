@@ -30,9 +30,6 @@ in
     '';
 
     profileExtra = ''
-      if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
-        exec start-hyprland
-      fi
     '';
   };
 
@@ -107,7 +104,7 @@ in
       bold_font = "auto";
       bold_italic_font = "auto";
       font_size = "12.0";
-      background_opacity = "0.4";
+      background_opacity = "1.0"; #0.4 DELETE LATER
       cursor_shape = "block";
       cursor_blink_interval = "0.5";
       confirm_os_window_close = 0;
@@ -117,6 +114,7 @@ in
       window_border_width = "1";
       window_margin_width = "5";
       background = "#0a0e14";
+      hide_window_decorations = "yes";
     };
     extraConfig = ''
       include colors.conf
@@ -242,6 +240,15 @@ in
   xdg.configFile."yazi/init.lua".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/yaziconf/init.lua";
   xdg.configFile."yazi/yazi.toml".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/yaziconf/yazi.toml";
   xdg.configFile."matugen".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/matugenconf";
-  xdg.configFile."hypr".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/config/hypr";
   xdg.configFile."quickshell".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/config/quickshell";
+  #xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots-nixos/config/niri/config.kdl";
+  xdg.configFile."niri/config.kdl".source =
+    pkgs.runCommand "niri-config-checked"
+    {
+      nativeBuildInputs = [ pkgs.niri ];
+    }
+    ''
+      niri validate --config ${./dots-nixos/config/niri/config.kdl}
+      cp ${./dots-nixos/config/niri/config.kdl} $out
+    '';
 }

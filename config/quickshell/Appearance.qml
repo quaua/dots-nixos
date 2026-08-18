@@ -2,5 +2,5 @@ pragma Singleton
 import QtQuick
 
 QtObject {
-    readonly property int barHeight: 40
+    readonly property int barHeight: 46
 }

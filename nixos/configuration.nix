@@ -1,237 +1,242 @@
 { config, pkgs, inputs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./ssh.nix
-      inputs.spicetify-nix.nixosModules.default
-    ];
+    imports =
+        [ # Include the results of the hardware scan.
+        ./hardware-configuration.nix
+            ./ssh.nix
+            inputs.spicetify-nix.nixosModules.default
+        ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+# Bootloader.
+    boot.loader.systemd-boot.enable = true;
+    boot.loader.efi.canTouchEfiVariables = true;
+# Use latest kernel.
+    boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "reaper";
-  networking.networkmanager.enable = true;
+    networking.hostName = "reaper";
+    networking.networkmanager.enable = true;
 
-  time.timeZone = "Asia/Almaty";
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "kk_KZ.UTF-8";
-    LC_IDENTIFICATION = "kk_KZ.UTF-8";
-    LC_MEASUREMENT = "kk_KZ.UTF-8";
-    LC_MONETARY = "kk_KZ.UTF-8";
-    LC_NAME = "kk_KZ.UTF-8";
-    LC_NUMERIC = "kk_KZ.UTF-8";
-    LC_PAPER = "kk_KZ.UTF-8";
-    LC_TELEPHONE = "kk_KZ.UTF-8";
-    LC_TIME = "kk_KZ.UTF-8";
-  };
+    time.timeZone = "Asia/Almaty";
+    i18n.defaultLocale = "en_US.UTF-8";
+    i18n.extraLocaleSettings = {
+        LC_ADDRESS = "kk_KZ.UTF-8";
+        LC_IDENTIFICATION = "kk_KZ.UTF-8";
+        LC_MEASUREMENT = "kk_KZ.UTF-8";
+        LC_MONETARY = "kk_KZ.UTF-8";
+        LC_NAME = "kk_KZ.UTF-8";
+        LC_NUMERIC = "kk_KZ.UTF-8";
+        LC_PAPER = "kk_KZ.UTF-8";
+        LC_TELEPHONE = "kk_KZ.UTF-8";
+        LC_TIME = "kk_KZ.UTF-8";
+    };
 
-  users.users.jaga = {
-    isNormalUser = true;
-    description = "jaga";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
-  };
+    users.users.jaga = {
+        isNormalUser = true;
+        description = "jaga";
+        extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    };
 
-  nixpkgs.config.allowUnfree = true;
-  environment.systemPackages = with pkgs; [ 
-    (python3.withPackages (p: with p; [ 
-        requests
-    ]))
+    nixpkgs.config.allowUnfree = true;
+    environment.systemPackages = with pkgs; [ 
+        (python3.withPackages (p: with p; [ 
+                               requests
+        ]))
 
-    (vscode-with-extensions.override {
-      vscode = vscodium;
-      vscodeExtensions = with vscode-extensions; [
-        ms-python.python
-      ];
-    })
+        (vscode-with-extensions.override {
+         vscode = vscodium;
+         vscodeExtensions = with vscode-extensions; [
+         ms-python.python
+         ];
+         })
 
     inputs.matugen.packages.x86_64-linux.default
-    inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-    neovim
-    git
-    kitty
-    vesktop
-    swaynotificationcenter
-    quickshell
-    rofi
-    yazi
-    pavucontrol
-    steam
-    unzip
-    p7zip
-    ffmpeg-full
-    telegram-desktop
-    python3
-    wl-clipboard
-    cliphist
-    dragon-drop
-    gimp
-    loupe
-    fastfetch
-    morewaita-icon-theme
-    grim
-    slurp
-    satty
-    vlc
-    fdupes
-    findimagedupes
-    mediainfo
-    imagemagick
-    exiftool
-    home-manager
-    wineWow64Packages.stable
-    winetricks
-    wget
-    baobab
-    glib
-    gsettings-desktop-schemas
-    mangohud
-    libreoffice
-    protontricks
-    gamescope
-    btop
-    shotcut
-    libfaketime
-    starship
-    vscodium
-    unrar-free
-    spotify
-    virt-manager
-    virt-viewer
-    spice 
-    spice-gtk
-    spice-protocol
-    virtio-win
-    win-spice
-    pkgs.adwaita-icon-theme
-    file
-  ];
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    material-symbols
-  ];
-
-  system.stateVersion = "25.11"; # do not
-  #
-  # NVIDIA
-  #
-  hardware.graphics.enable32Bit = true;
-  boot.blacklistedKernelModules = [ "nouveau" ];
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.graphics.enable = true; # Enable OpenGL
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
-  hardware.nvidia = {
-    modesetting.enable = true; # modesetting is required
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = true; # Use open source drivers
-  };
-  #
-  # TTY AUTOLOGIN 
-  #
-  services.getty.autologinUser = "jaga";
-  #
-  # HYPRLAND
-  #
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-    withUWSM = false;
-  };
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
-  };
-  services.dbus.enable = true;
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    config.common.default = "*";
-  };
-  #
-  # NIX EXPERIMENTAL
-  #
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  #
-  # SHELL ALIASES
-  #
-  environment.shellAliases = {
-    nrsf = "sudo nixos-rebuild switch --flake /etc/nixos#reaper";
-  };
-  #
-  # AUDIO
-  #
-  security.rtkit.enable = true; # Enable RealtimeKit for audio purposes
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-  #
-  # STEAM
-  #
-  programs.steam.gamescopeSession.enable = true;
-  programs.gamemode.enable = true;
-  #
-  # APPIMAGE
-  #
-  programs.appimage.enable = true;
-  #
-  # MIRRORS
-  #
-  nix = {
-      settings = {
-          substituters = [
-          "https://mirror.sjtu.edu.cn/nix-channels/store"
-          "https://mirrors.ustc.edu.cn/nix-channels/store"
-          "https://cache.nixos.org"
-          ];
-          http-connections = 128;
-          max-substitution-jobs = 128;
-          max-jobs = "auto";
-      };
-  };
-  #
-  # SPICETIFY
-  #
-  programs.spicetify =
-  let
-    spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-  in
-  {
-    enable = true;
-    enabledExtensions = with spicePkgs.extensions; [
-      adblock
-      hidePodcasts
-      shuffle
+        inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
+        inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+        inputs.qml-niri.packages.${pkgs.stdenv.hostPlatform.system}.quickshell
+        neovim
+        git
+        kitty
+        vesktop
+        swaynotificationcenter
+        rofi
+        yazi
+        pavucontrol
+        steam
+        unzip
+        p7zip
+        ffmpeg-full
+        telegram-desktop
+        python3
+        wl-clipboard
+        cliphist
+        dragon-drop
+        gimp
+        loupe
+        fastfetch
+        morewaita-icon-theme
+        grim
+        slurp
+        satty
+        vlc
+        fdupes
+        findimagedupes
+        mediainfo
+        imagemagick
+        exiftool
+        home-manager
+        wineWow64Packages.stable
+        winetricks
+        wget
+        baobab
+        glib
+        gsettings-desktop-schemas
+        mangohud
+        libreoffice
+        protontricks
+        gamescope
+        btop
+        shotcut
+        libfaketime
+        starship
+        vscodium
+        unrar-free
+        spotify
+        virt-manager
+        virt-viewer
+        spice 
+        spice-gtk
+        spice-protocol
+        virtio-win
+        win-spice
+        pkgs.adwaita-icon-theme
+        file
+        unrar
+        lutris
+        xwayland-satellite
+        qt6.qtbase
+        qt6.qtdeclarative
+        qt6.qttools
+        ];
+    fonts.packages = with pkgs; [
+        nerd-fonts.jetbrains-mono
+            material-symbols
     ];
-  };
-  #
-  # VM
-  #
-  programs.dconf.enable = true;
-  virtualisation = {
-    libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true;
-      };
+
+    system.stateVersion = "25.11"; # do not
+#
+# NVIDIA
+#
+    hardware.graphics.enable32Bit = true;
+    boot.blacklistedKernelModules = [ "nouveau" ];
+    services.xserver.videoDrivers = [ "nvidia" ];
+    hardware.graphics.enable = true; # Enable OpenGL
+    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+    hardware.nvidia = {
+        modesetting.enable = true; # modesetting is required
+        powerManagement.enable = false;
+        powerManagement.finegrained = false;
+        nvidiaPersistenced = true;
+        open = true; # Use open source drivers
     };
-    spiceUSBRedirection.enable = true;
-  };
-  services.spice-vdagentd.enable = true;
-  #
-  # FIREWALL
-  #
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 8080 2222 ];
-  };
+#
+# TTY AUTOLOGIN 
+#
+    services.getty.autologinUser = "jaga";
+#
+# NIRI
+#
+    environment.sessionVariables = {
+        NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
+    };
+    services.dbus.enable = true;
+    xdg.portal = {
+        enable = true;
+        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+        config.common.default = "*";
+    };
+    programs.niri.enable = true;
+    security.polkit.enable = true;
+    services.gnome.gnome-keyring.enable = true;
+#
+# NIX EXPERIMENTAL
+#
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+#
+# SHELL ALIASES
+#
+    environment.shellAliases = {
+        nrsf = "sudo nixos-rebuild switch --flake /etc/nixos#reaper";
+    };
+#
+# AUDIO
+#
+    security.rtkit.enable = true; # Enable RealtimeKit for audio purposes
+        services.pipewire = {
+            enable = true;
+            alsa.enable = true;
+            alsa.support32Bit = true;
+            pulse.enable = true;
+            jack.enable = true;
+        };
+#
+# STEAM
+#
+    programs.steam.gamescopeSession.enable = true;
+    programs.gamemode.enable = true;
+#
+# APPIMAGE
+#
+    programs.appimage.enable = true;
+#
+# MIRRORS
+#
+    nix = {
+        settings = {
+            substituters = [
+                "https://mirror.sjtu.edu.cn/nix-channels/store"
+                    "https://mirrors.ustc.edu.cn/nix-channels/store"
+                    "https://cache.nixos.org"
+            ];
+            http-connections = 128;
+            max-substitution-jobs = 128;
+            max-jobs = "auto";
+        };
+    };
+#
+# SPICETIFY
+#
+    programs.spicetify =
+        let
+        spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+    in
+    {
+        enable = true;
+        enabledExtensions = with spicePkgs.extensions; [
+            adblock
+                hidePodcasts
+                shuffle
+        ];
+    };
+#
+# VM
+#
+    programs.dconf.enable = true;
+    virtualisation = {
+        libvirtd = {
+            enable = true;
+            qemu = {
+                swtpm.enable = true;
+            };
+        };
+        spiceUSBRedirection.enable = true;
+    };
+    services.spice-vdagentd.enable = true;
+#
+# FIREWALL
+#
+    networking.firewall = {
+        enable = true;
+        allowedTCPPorts = [ 8080 2222 ];
+    };
 }

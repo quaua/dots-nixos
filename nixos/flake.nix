@@ -2,7 +2,7 @@
     description = "I have no fucking idea what i wrote down there.";
 
     inputs = {
-        nixpkgs.url = "nixpkgs/nixos-unstable";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
         home-manager = {
             url = "github:nix-community/home-manager";
             inputs.nixpkgs.follows = "nixpkgs"; # force to use already set nixpkgs branch
@@ -15,6 +15,15 @@
         zen-browser = {
             url = "github:youwen5/zen-browser-flake";
             inputs.nixpkgs.follows = "nixpkgs";
+        };
+        quickshell = {
+            url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
+        qml-niri = {
+            url = "github:imiric/qml-niri/main";
+            inputs.nixpkgs.follows = "nixpkgs";
+            inputs.quickshell.follows = "quickshell";
         };
     };
 

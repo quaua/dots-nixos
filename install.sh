@@ -9,4 +9,3 @@ sudo nixos-rebuild switch --flake /etc/nixos#reaper
 
 awww img /etc/nixos/dots-nixos/wallpapers/ign_colorful.png
 matugen color hex "#be616a"
-hyprctl reload
